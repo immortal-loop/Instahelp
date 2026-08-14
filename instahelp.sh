@@ -98,14 +98,14 @@ echo -e "${GREEN}------------------------------------------------------------${R
 echo ""
 
 # =========================================================
-# MENU (Properly Aligned & Cleaned up)
+# MENU
 # =========================================================
 
 echo -e "${GREEN}  [1] ${CYAN}ACCOUNT DISABLED${RESET}"
-echo -e "${CYAN}  [2] ${PURPLE}ACCOUNT SUSPENDED${RESET}"
-echo -e "${PURPLE}  [3] ${PINK}ACCOUNT BAN${RESET}"
-echo -e "${PINK}  [4] ${YELLOW}ABOUT THIS TOOL${RESET}"
-echo -e "${RED}  [0] ${ORANGE}EXIT${RESET}"
+echo -e "${GREEN}  [2] ${PURPLE}ACCOUNT SUSPENDED${RESET}"
+echo -e "${GREEN}  [3] ${PINK}ACCOUNT BAN${RESET}"
+echo -e "${GREEN}  [4] ${YELLOW}ABOUT THIS TOOL${RESET}"
+echo -e "${GREEN}  [0] ${ORANGE}EXIT${RESET}"
 
 echo ""
 
@@ -113,7 +113,55 @@ echo -e "${GREEN}------------------------------------------------------------${R
 
 echo ""
 
-read -p "$(echo -e "${GREEN}Choose an option: ${RESET})" choice
+read -p "$(echo -e "${GREEN}Choose an option: ${RESET}")" choice
+
+# =========================================================
+# RECOVERY & LOADING FUNCTION
+# =========================================================
+
+handle_recovery() {
+    local title="$1"
+    clear
+
+    echo -e "${GREEN}======================================${RESET}"
+    echo -e "${GREEN}       $title${RESET}"
+    echo -e "${GREEN}======================================${RESET}"
+
+    echo ""
+    echo -e "${CYAN}Enter your username below:${RESET}"
+    read -p "> " username
+
+    echo ""
+    echo -e "${YELLOW}[+] Searching database for @$username...${RESET}"
+    sleep 1.2
+    echo -e "${GREEN}[✔] Username found: @$username${RESET}"
+
+    echo ""
+    echo -e "${CYAN}Enter private key:${RESET}"
+    read -p "> " pkey
+
+    if [ "$pkey" = "recoveracc@123" ]; then
+        echo ""
+        echo -e "${GREEN}[✔] Key verified! Starting recovery sequence...${RESET}"
+        sleep 0.8
+        
+        # Loading bar simulation
+        echo ""
+        for i in {1..20}; do
+            printf "${CYAN}█${RESET}"
+            sleep 0.05
+        done
+        echo -e " ${GREEN}100%${RESET}"
+        
+        echo ""
+        echo -e "${GREEN}======================================${RESET}"
+        echo -e "${GREEN}  ACCOUNT RECOVERED SUCCESSFULLY!     ${RESET}"
+        echo -e "${GREEN}======================================${RESET}"
+    else
+        echo ""
+        echo -e "${RED}[✖] Error: Invalid key! Access denied.${RESET}"
+    fi
+}
 
 # =========================================================
 # OPTIONS
@@ -122,51 +170,15 @@ read -p "$(echo -e "${GREEN}Choose an option: ${RESET})" choice
 case "$choice" in
 
     1)
-        clear
-
-        echo -e "${GREEN}======================================${RESET}"
-        echo -e "${GREEN}       ACCOUNT DISABLED${RESET}"
-        echo -e "${GREEN}======================================${RESET}"
-
-        echo ""
-        echo -e "${CYAN}Enter your username below:${RESET}"
-
-        read -p "> " username
-
-        echo ""
-        echo -e "${GREEN}Username entered:${RESET} $username"
+        handle_recovery "ACCOUNT DISABLED"
         ;;
 
     2)
-        clear
-
-        echo -e "${CYAN}======================================${RESET}"
-        echo -e "${CYAN}         ACCOUNT SUSPENDED${RESET}"
-        echo -e "${CYAN}======================================${RESET}"
-
-        echo ""
-        echo -e "${CYAN}Enter your username below:${RESET}"
-
-        read -p "> " username
-
-        echo ""
-        echo -e "${GREEN}Username entered:${RESET} $username"
+        handle_recovery "ACCOUNT SUSPENDED"
         ;;
 
     3)
-        clear
-
-        echo -e "${PURPLE}======================================${RESET}"
-        echo -e "${PURPLE}         ACCOUNT BAN${RESET}"
-        echo -e "${PURPLE}======================================${RESET}"
-
-        echo ""
-        echo -e "${CYAN}Enter your username below:${RESET}"
-
-        read -p "> " username
-
-        echo ""
-        echo -e "${GREEN}Username entered:${RESET} $username"
+        handle_recovery "ACCOUNT BAN"
         ;;
 
     4)
