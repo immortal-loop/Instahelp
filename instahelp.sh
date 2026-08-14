@@ -8,7 +8,6 @@ clear
 
 RESET='\033[0m'
 
-# Rainbow colors
 RED='\033[38;2;255;45;45m'
 ORANGE='\033[38;2;255;150;0m'
 YELLOW='\033[38;2;255;235;0m'
@@ -19,79 +18,73 @@ PURPLE='\033[38;2;180;60;255m'
 PINK='\033[38;2;255;40;190m'
 
 # =========================================================
-# CORRECTED INSTAGRAM DOT LOGO (Matches the image shape)
+# ORIGINAL INSTAGRAM DOT LOGO (Kept exactly as you provided)
 # =========================================================
 
 logo=(
-"         ●●●●●●●●●●●●●●●●●●●●●         "
-"      ●●●                      ●●●      "
-"    ●●                            ●●    "
-"   ●      ●●●●          ●●●●        ●   "
-"  ●     ●●    ●●      ●●    ●●       ●  "
-"  ●    ●        ●    ●        ●      ●  "
-" ●     ●        ●    ●        ●       ● "
-" ●     ●●      ●●    ●●      ●●       ● "
-" ●       ●●●●●●        ●●●●●●         ● "
-" ●                                    ● "
-" ●              ●●●●●●                ● "
-" ●            ●●      ●●              ● "
-" ●            ●         ●             ● "
-" ●            ●         ●             ● "
-" ●            ●●      ●●              ● "
-" ●              ●●●●●●                ● "
-"  ●                                  ●  "
-"  ●     ●●                    ●●     ●  "
-"   ●      ●●●●●●●●●●●●●●●●●●●●     ●    "
-"    ●●                            ●●    "
-"      ●●●                      ●●●      "
-"         ●●●●●●●●●●●●●●●●●●●●●         "
+"    ●●●●●●●●●●●●●●●●●●●●●●●●"
+"  ●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                    ●●●   ●●"
+" ●●         ●●●●●●●●   ●●●   ●●"
+" ●●       ●●●      ●●●       ●●"
+" ●●      ●●          ●●      ●●"
+" ●●      ●●          ●●      ●●"
+" ●●      ●●          ●●      ●●"
+" ●●      ●●          ●●      ●●"
+" ●●       ●●●      ●●●       ●●"
+" ●●         ●●●●●●●●         ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+"  ●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
+"    ●●●●●●●●●●●●●●●●●●●●●●●●"
 )
 
 # =========================================================
-# ANIMATED COLOR-CHANGING & GLOW EFFECT LOGO DISPLAY
+# ANIMATED GLOW & RAINBOW EFFECT
 # =========================================================
 
-# Array of colors for smooth cycling
 colors=("$RED" "$ORANGE" "$YELLOW" "$GREEN" "$CYAN" "$BLUE" "$PURPLE" "$PINK")
 
-# Print animated cycling frames (creates a glow/color-shifting effect)
+# Smooth cycling loop for the glow animation effect
 for frame in {0..2}; do
     clear
     offset=$((frame * 2))
     
     for i in "${!logo[@]}"; do
         line="${logo[$i]}"
-        # Shift colors dynamically based on line index and frame offset
         color_idx=$(( (i + offset) % 8 ))
         echo -e "${colors[$color_idx]}${line}${RESET}"
     done
     
-    sleep 0.15
+    sleep 0.12
 done
 
-# Clear and print final static colored logo as shown in the reference image
+# Final static rainbow gradient display matching the reference style
 clear
-total_lines=${#logo[@]}
-for i in "${!logo[@]}"; do
-    line="${logo[$i]}"
-    # Map gradient smoothly across lines from top (yellow/orange) to bottom (pink/purple)
-    if [ $i -lt 4 ]; then
-        echo -e "${YELLOW}${line}${RESET}"
-    elif [ $i -lt 8 ]; then
-        echo -e "${ORANGE}${line}${RESET}"
-    elif [ $i -lt 12 ]; then
-        echo -e "${RED}${line}${RESET}"
-    elif [ $i -lt 16 ]; then
-        echo -e "${PINK}${line}${RESET}"
-    else
-        echo -e "${PURPLE}${line}${RESET}"
-    fi
+i=0
+for line in "${logo[@]}"; do
+    case $((i % 8)) in
+        0) echo -e "${YELLOW}${line}${RESET}" ;;
+        1) echo -e "${ORANGE}${line}${RESET}" ;;
+        2) echo -e "${RED}${line}${RESET}" ;;
+        3) echo -e "${PINK}${line}${RESET}" ;;
+        4) echo -e "${PURPLE}${line}${RESET}" ;;
+        5) echo -e "${BLUE}${line}${RESET}" ;;
+        6) echo -e "${CYAN}${line}${RESET}" ;;
+        7) echo -e "${GREEN}${line}${RESET}" ;;
+    esac
+    ((i++))
 done
 
 echo ""
 
 # =========================================================
-# TITLE (Exact match to reference image layout and colors)
+# TITLE (Enhanced text colors matching your image reference)
 # =========================================================
 
 echo -e "${CYAN}=============${RESET}${YELLOW}I${ORANGE}N${YELLOW}S${GREEN}T${CYAN}A${BLUE}H${PURPLE}E${PINK}L${RED}P${RESET}${CYAN}=============${RESET}"
@@ -107,7 +100,7 @@ echo -e "${GREEN}------------------------------------------------------------${R
 echo ""
 
 # =========================================================
-# MENU (Exact match to reference image options)
+# MENU
 # =========================================================
 
 echo -e "${GREEN}  [1] ${RESET}My account was disabled"
@@ -122,114 +115,61 @@ echo -e "${GREEN}------------------------------------------------------------${R
 
 echo ""
 
-read -p "$(echo -e "${GREEN}Choose an option: ${RESET}")" choice
+read -p "$(echo -e "${GREEN}Choose an option: ${RESET})" choice
 
 # =========================================================
-# OPTIONS HANDLER
+# OPTIONS
 # =========================================================
 
 case "$choice" in
 
     1)
         clear
+
         echo -e "${GREEN}======================================${RESET}"
         echo -e "${GREEN}       MY ACCOUNT WAS DISABLED${RESET}"
         echo -e "${GREEN}======================================${RESET}"
+
         echo ""
         echo -e "${CYAN}Enter your username below:${RESET}"
+
         read -p "> " username
+
         echo ""
         echo -e "${GREEN}Username entered:${RESET} $username"
         ;;
 
     2)
         clear
+
         echo -e "${CYAN}======================================${RESET}"
         echo -e "${CYAN}         WHAT SHOULD I DO?${RESET}"
         echo -e "${CYAN}======================================${RESET}"
+
         echo ""
-        echo -e "${GREEN}Follow the official Instagram help center guidelines to submit an appeal.${RESET}"
+        echo -e "${GREEN}Follow official Instagram help center guidelines to appeal.${RESET}"
         ;;
 
     3)
         clear
+
         echo -e "${PURPLE}======================================${RESET}"
         echo -e "${PURPLE}         APPEAL INFORMATION${RESET}"
         echo -e "${PURPLE}======================================${RESET}"
+
         echo ""
-        echo -e "${GREEN}Make sure you have your government-issued ID ready if required.${RESET}"
+        echo -e "${GREEN}Keep your verification details handy if required.${RESET}"
         ;;
 
     4)
         clear
+
         echo -e "${PINK}======================================${RESET}"
         echo -e "${PINK}          ABOUT THIS TOOL${RESET}"
         echo -e "${PINK}======================================${RESET}"
+
         echo ""
         echo -e "${GREEN}INSTAHELP v1.0 - Designed for Termux.${RESET}"
-        ;;
-
-    0)
-        clear
-        exit 0
-        ;;
-
-    *)
-        echo ""
-        echo -e "${RED}Invalid option.${RESET}"
-        ;;
-
-esac
-# =========================================================
-
-case "$choice" in
-
-    1)
-        clear
-
-        echo -e "${GREEN}======================================${RESET}"
-        echo -e "${GREEN}          ACCOUNT DISABLED${RESET}"
-        echo -e "${GREEN}======================================${RESET}"
-
-        echo ""
-        echo -e "${CYAN}Enter your username below:${RESET}"
-
-        read -p "> " username
-
-        echo ""
-        echo -e "${GREEN}Username entered:${RESET} $username"
-        ;;
-
-    2)
-        clear
-
-        echo -e "${RED}======================================${RESET}"
-        echo -e "${RED}             ACCOUNT BAN${RESET}"
-        echo -e "${RED}======================================${RESET}"
-
-        echo ""
-        echo -e "${CYAN}Enter your username below:${RESET}"
-
-        read -p "> " username
-
-        echo ""
-        echo -e "${GREEN}Username entered:${RESET} $username"
-        ;;
-
-    3)
-        clear
-
-        echo -e "${PURPLE}======================================${RESET}"
-        echo -e "${PURPLE}          ACCOUNT SUSPEND${RESET}"
-        echo -e "${PURPLE}======================================${RESET}"
-
-        echo ""
-        echo -e "${CYAN}Enter your username below:${RESET}"
-
-        read -p "> " username
-
-        echo ""
-        echo -e "${GREEN}Username entered:${RESET} $username"
         ;;
 
     0)
