@@ -101,11 +101,11 @@ echo ""
 # MENU (Random colors for menu text lines)
 # =========================================================
 
-echo -e "${GREEN}  [1] ${CYAN}My account was disabled${RESET}"
-echo -e "${CYAN}  [2] ${PURPLE}What should I do?${RESET}"
-echo -e "${PURPLE}  [3] ${PINK}Appeal information${RESET}"
-echo -e "${PINK}  [4] ${YELLOW}About this tool${RESET}"
-echo -e "${RED}  [0] ${ORANGE}Exit${RESET}"
+echo -e "${GREEN}  [1] ${CYAN} ACCOUNT DISABLED${RESET}"
+echo -e "${CYAN}  [2] ${PURPLE} ACCOUNT SUSPENDED${RESET}"
+echo -e "${PURPLE}  [3] ${PINK} ACCOUNT BAN${RESET}"
+echo -e "${PINK}  [4] ${YELLOW}ABOUT THIS TOOL${RESET}"
+echo -e "${RED}  [0] ${ORANGE}EXIT${RESET}"
 
 echo ""
 
