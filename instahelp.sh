@@ -125,7 +125,7 @@ case "$choice" in
         clear
 
         echo -e "${GREEN}======================================${RESET}"
-        echo -e "${GREEN}       MY ACCOUNT WAS DISABLED${RESET}"
+        echo -e "${GREEN}       ACCOUNT DISABLED${RESET}"
         echo -e "${GREEN}======================================${RESET}"
 
         echo ""
@@ -141,22 +141,22 @@ case "$choice" in
         clear
 
         echo -e "${CYAN}======================================${RESET}"
-        echo -e "${CYAN}         WHAT SHOULD I DO?${RESET}"
+        echo -e "${CYAN}         ACCOUNT SUSPENDED${RESET}"
         echo -e "${CYAN}======================================${RESET}"
 
         echo ""
-        echo -e "${GREEN}Follow official Instagram help center guidelines to appeal.${RESET}"
+        echo -e "${GREEN}Enter your username below:.${RESET}"
         ;;
 
     3)
         clear
 
         echo -e "${PURPLE}======================================${RESET}"
-        echo -e "${PURPLE}         APPEAL INFORMATION${RESET}"
+        echo -e "${PURPLE}         ACCOUNT BAN${RESET}"
         echo -e "${PURPLE}======================================${RESET}"
 
         echo ""
-        echo -e "${GREEN}Keep your verification details handy if required.${RESET}"
+        echo -e "${GREEN}Enter your username below:.${RESET}"
         ;;
 
     4)
