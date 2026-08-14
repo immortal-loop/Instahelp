@@ -98,12 +98,12 @@ echo -e "${GREEN}------------------------------------------------------------${R
 echo ""
 
 # =========================================================
-# MENU (Random colors for menu text lines)
+# MENU (Properly Aligned & Cleaned up)
 # =========================================================
 
-echo -e "${GREEN}  [1] ${CYAN} ACCOUNT DISABLED${RESET}"
-echo -e "${CYAN}  [2] ${PURPLE} ACCOUNT SUSPENDED${RESET}"
-echo -e "${PURPLE}  [3] ${PINK} ACCOUNT BAN${RESET}"
+echo -e "${GREEN}  [1] ${CYAN}ACCOUNT DISABLED${RESET}"
+echo -e "${CYAN}  [2] ${PURPLE}ACCOUNT SUSPENDED${RESET}"
+echo -e "${PURPLE}  [3] ${PINK}ACCOUNT BAN${RESET}"
 echo -e "${PINK}  [4] ${YELLOW}ABOUT THIS TOOL${RESET}"
 echo -e "${RED}  [0] ${ORANGE}EXIT${RESET}"
 
@@ -113,7 +113,7 @@ echo -e "${GREEN}------------------------------------------------------------${R
 
 echo ""
 
-read -p "$(echo -e "${GREEN}Choose an option: ${RESET}")" choice
+read -p "$(echo -e "${GREEN}Choose an option: ${RESET})" choice
 
 # =========================================================
 # OPTIONS
@@ -145,7 +145,12 @@ case "$choice" in
         echo -e "${CYAN}======================================${RESET}"
 
         echo ""
-        echo -e "${GREEN}Enter your username below:.${RESET}"
+        echo -e "${CYAN}Enter your username below:${RESET}"
+
+        read -p "> " username
+
+        echo ""
+        echo -e "${GREEN}Username entered:${RESET} $username"
         ;;
 
     3)
@@ -156,84 +161,12 @@ case "$choice" in
         echo -e "${PURPLE}======================================${RESET}"
 
         echo ""
-        echo -e "${GREEN}Enter your username below:.${RESET}"
-        ;;
-
-    4)
-        clear
-
-        echo -e "${PINK}======================================${RESET}"
-        echo -e "${PINK}          ABOUT THIS TOOL${RESET}"
-        echo -e "${PINK}======================================${RESET}"
-
-        echo ""
-        echo -e "${GREEN}INSTAHELP v1.0 - Designed for Termux.${RESET}"
-        ;;
-
-    0)
-        clear
-        exit 0
-        ;;
-
-    *)
-        echo ""
-        echo -e "${RED}Invalid option.${RESET}"
-        ;;
-
-esac
-echo -e "${PINK}  [4] ${RESET}About this tool"
-echo -e "${RED}  [0] ${RESET}Exit"
-
-echo ""
-
-echo -e "${GREEN}------------------------------------------------------------${RESET}"
-
-echo ""
-
-read -p "$(echo -e "${GREEN}Choose an option: ${RESET})" choice
-
-# =========================================================
-# OPTIONS
-# =========================================================
-
-case "$choice" in
-
-    1)
-        clear
-
-        echo -e "${GREEN}======================================${RESET}"
-        echo -e "${GREEN}       MY ACCOUNT WAS DISABLED${RESET}"
-        echo -e "${GREEN}======================================${RESET}"
-
-        echo ""
         echo -e "${CYAN}Enter your username below:${RESET}"
 
         read -p "> " username
 
         echo ""
         echo -e "${GREEN}Username entered:${RESET} $username"
-        ;;
-
-    2)
-        clear
-
-        echo -e "${CYAN}======================================${RESET}"
-        echo -e "${CYAN}         WHAT SHOULD I DO?${RESET}"
-        echo -e "${CYAN}======================================${RESET}"
-
-        echo ""
-        echo -e "${GREEN}Follow official Instagram help center guidelines to appeal.${RESET}"
-        ;;
-
-    3)
-        clear
-
-        echo -e "${PURPLE}======================================${RESET}"
-        echo -e "${PURPLE}         APPEAL INFORMATION${RESET}"
-        echo -e "${PURPLE}======================================${RESET}"
-
-        echo ""
-        echo -e "${GREEN}Keep your verification details handy if required.${RESET}"
         ;;
 
     4)
