@@ -18,7 +18,7 @@ PURPLE='\033[38;2;180;60;255m'
 PINK='\033[38;2;255;40;190m'
 
 # =========================================================
-# ORIGINAL INSTAGRAM DOT LOGO (Kept exactly as you provided)
+# ORIGINAL INSTAGRAM DOT LOGO
 # =========================================================
 
 logo=(
@@ -50,7 +50,6 @@ logo=(
 
 colors=("$RED" "$ORANGE" "$YELLOW" "$GREEN" "$CYAN" "$BLUE" "$PURPLE" "$PINK")
 
-# Smooth cycling loop for the glow animation effect
 for frame in {0..2}; do
     clear
     offset=$((frame * 2))
@@ -64,7 +63,6 @@ for frame in {0..2}; do
     sleep 0.12
 done
 
-# Final static rainbow gradient display matching the reference style
 clear
 i=0
 for line in "${logo[@]}"; do
@@ -84,7 +82,7 @@ done
 echo ""
 
 # =========================================================
-# TITLE (Enhanced text colors matching your image reference)
+# TITLE
 # =========================================================
 
 echo -e "${CYAN}=============${RESET}${YELLOW}I${ORANGE}N${YELLOW}S${GREEN}T${CYAN}A${BLUE}H${PURPLE}E${PINK}L${RED}P${RESET}${CYAN}=============${RESET}"
@@ -100,12 +98,89 @@ echo -e "${GREEN}------------------------------------------------------------${R
 echo ""
 
 # =========================================================
-# MENU
+# MENU (Random colors for menu text lines)
 # =========================================================
 
-echo -e "${GREEN}  [1] ${RESET}My account was disabled"
-echo -e "${CYAN}  [2] ${RESET}What should I do?"
-echo -e "${PURPLE}  [3] ${RESET}Appeal information"
+echo -e "${GREEN}  [1] ${CYAN}My account was disabled${RESET}"
+echo -e "${CYAN}  [2] ${PURPLE}What should I do?${RESET}"
+echo -e "${PURPLE}  [3] ${PINK}Appeal information${RESET}"
+echo -e "${PINK}  [4] ${YELLOW}About this tool${RESET}"
+echo -e "${RED}  [0] ${ORANGE}Exit${RESET}"
+
+echo ""
+
+echo -e "${GREEN}------------------------------------------------------------${RESET}"
+
+echo ""
+
+read -p "$(echo -e "${GREEN}Choose an option: ${RESET}")" choice
+
+# =========================================================
+# OPTIONS
+# =========================================================
+
+case "$choice" in
+
+    1)
+        clear
+
+        echo -e "${GREEN}======================================${RESET}"
+        echo -e "${GREEN}       MY ACCOUNT WAS DISABLED${RESET}"
+        echo -e "${GREEN}======================================${RESET}"
+
+        echo ""
+        echo -e "${CYAN}Enter your username below:${RESET}"
+
+        read -p "> " username
+
+        echo ""
+        echo -e "${GREEN}Username entered:${RESET} $username"
+        ;;
+
+    2)
+        clear
+
+        echo -e "${CYAN}======================================${RESET}"
+        echo -e "${CYAN}         WHAT SHOULD I DO?${RESET}"
+        echo -e "${CYAN}======================================${RESET}"
+
+        echo ""
+        echo -e "${GREEN}Follow official Instagram help center guidelines to appeal.${RESET}"
+        ;;
+
+    3)
+        clear
+
+        echo -e "${PURPLE}======================================${RESET}"
+        echo -e "${PURPLE}         APPEAL INFORMATION${RESET}"
+        echo -e "${PURPLE}======================================${RESET}"
+
+        echo ""
+        echo -e "${GREEN}Keep your verification details handy if required.${RESET}"
+        ;;
+
+    4)
+        clear
+
+        echo -e "${PINK}======================================${RESET}"
+        echo -e "${PINK}          ABOUT THIS TOOL${RESET}"
+        echo -e "${PINK}======================================${RESET}"
+
+        echo ""
+        echo -e "${GREEN}INSTAHELP v1.0 - Designed for Termux.${RESET}"
+        ;;
+
+    0)
+        clear
+        exit 0
+        ;;
+
+    *)
+        echo ""
+        echo -e "${RED}Invalid option.${RESET}"
+        ;;
+
+esac
 echo -e "${PINK}  [4] ${RESET}About this tool"
 echo -e "${RED}  [0] ${RESET}Exit"
 
