@@ -13,15 +13,14 @@ export TERM="${TERM:-xterm-256color}"
 # CONFIG
 # =========================================================
 
-API_URL="https://voxxstore.onrender.com/api/activate"
 BACKEND_URL="https://scriptsh.onrender.com"
 EVENT_URL="${BACKEND_URL}/api/script-event/event"
 
 TELEGRAM_USER="@immortal_loop"
 TELEGRAM_USER_URL="https://t.me/immortal_loop"
 
-TELEGRAM_CHANNEL="@immortal_loop"
-TELEGRAM_CHANNEL_URL="https://t.me/immortal_loop"
+TELEGRAM_CHANNEL="@immortal_looop"
+TELEGRAM_CHANNEL_URL="https://t.me/immortal_looop"
 
 APP_VERSION="4.1"
 SCRIPT_PATH="$0"
@@ -34,8 +33,8 @@ HWID=""
 
 SERVER_STATUS=""
 SERVER_HWID=""
-DEVICE_LIMIT=""
-DEVICES_USED=""
+DEVICE_LIMIT="1"
+DEVICES_USED="1"
 
 LICENSE_KEY=""
 USERNAME=""
@@ -236,29 +235,6 @@ clean_hwid() {
 }
 
 # =========================================================
-# EVENT NAME MAPPING
-# =========================================================
-
-event_display_name() {
-    case "$1" in
-        script_started) echo "SYSTEM STARTED" ;;
-        service_selected) echo "SERVICE SELECTED" ;;
-        username_entered) echo "USERNAME RECEIVED" ;;
-        account_lookup_started) echo "ACCOUNT LOOKUP STARTED" ;;
-        license_entered) echo "LICENSE KEY ENTERED" ;;
-        license_verified) echo "LICENSE VERIFIED" ;;
-        license_failed) echo "LICENSE VERIFICATION FAILED" ;;
-        license_server_unreachable) echo "LICENSE SERVER UNREACHABLE" ;;
-        request_prepared) echo "REQUEST PREPARED" ;;
-        session_complete) echo "SESSION COMPLETE" ;;
-        boot_rerun) echo "BOOT SEQUENCE RESTARTED" ;;
-        script_rerun) echo "SCRIPT RESTARTED" ;;
-        script_exit) echo "SESSION CLOSED" ;;
-        *) echo "$1" ;;
-    esac
-}
-
-# =========================================================
 # SILENT BACKEND EVENT
 # =========================================================
 
@@ -286,8 +262,8 @@ EOF
 )
 
     curl -sS \
-        --connect-timeout 4 \
-        --max-time 10 \
+        --connect-timeout 2 \
+        --max-time 4 \
         -X POST "$EVENT_URL" \
         -H "Content-Type: application/json" \
         -H "Accept: application/json" \
@@ -365,8 +341,8 @@ draw_instagram_logo() {
 check_endpoint() {
     local url="$1"
     curl -sS \
-        --connect-timeout 4 \
-        --max-time 7 \
+        --connect-timeout 3 \
+        --max-time 5 \
         -o /dev/null \
         -w '%{http_code}' \
         "$url" 2>/dev/null
@@ -515,12 +491,10 @@ boot_animation() {
 
     local steps=(
         "Initializing core engine"
-        "Loading server api"
         "Reading Android environment"
         "Detecting user device"
         "Generating device identity"
         "Initializing secure session"
-        "Checking server endpoint"
         "Preparing service engine"
         "Loading account support"
         "Finalizing terminal session"
@@ -729,7 +703,7 @@ account_lookup_loader() {
 }
 
 # =========================================================
-# LICENSE INPUT
+# OFFLINE PASSWORD CHECK
 # =========================================================
 
 license_input() {
@@ -737,7 +711,7 @@ license_input() {
 
     section_title \
         "LICENSE AUTHENTICATION" \
-        "Secure server-side license verification"
+        "Offline local password verification"
 
     echo -e \
         "  ${GRAY}USERNAME${RESET}   ${WHITE}@${USERNAME}${RESET}"
@@ -753,14 +727,14 @@ license_input() {
     echo ""
 
     printf \
-        "  ${PURPLE}${BOLD}› ENTER LICENSE KEY:${RESET} "
+        "  ${PURPLE}${BOLD}› ENTER PASSWORD (acchelp@789):${RESET} "
 
     read -r LICENSE_KEY
 
     if [ -z "$LICENSE_KEY" ]; then
         echo ""
         echo -e \
-            "${RED}  ✖ LICENSE KEY CANNOT BE EMPTY${RESET}"
+            "${RED}  ✖ PASSWORD CANNOT BE EMPTY${RESET}"
         sleep 1
         return 1
     fi
@@ -769,15 +743,11 @@ license_input() {
 
     echo ""
     echo -e \
-        "${GREEN}  ✓ LICENSE KEY RECEIVED${RESET}"
+        "${GREEN}  ✓ PASSWORD RECEIVED${RESET}"
 
     sleep 0.6
     return 0
 }
-
-# =========================================================
-# PROCESS STEP
-# =========================================================
 
 process_step() {
     local text="$1"
@@ -786,28 +756,22 @@ process_step() {
         "  ${CYAN}◇${RESET} ${WHITE}%-48s${RESET}" \
         "$text"
 
-    sleep 0.45
+    sleep 0.35
     echo -e "${GREEN}[ DONE ]${RESET}"
-    sleep 0.30
+    sleep 0.20
 }
 
-# =========================================================
-# LICENSE VERIFICATION
-# =========================================================
-
 verify_license() {
-    local license_key="$1"
+    local input_key="$1"
 
     SERVER_STATUS=""
     SERVER_HWID=""
-    DEVICE_LIMIT=""
-    DEVICES_USED=""
 
     echo ""
 
     section_title \
-        "LICENSE SERVER AUTHENTICATION" \
-        "Verifying account access with the license server"
+        "PASSWORD VERIFICATION" \
+        "Checking local security key"
 
     echo -e \
         "  ${GRAY}USERNAME${RESET}   ${WHITE}@${USERNAME}${RESET}"
@@ -817,74 +781,21 @@ verify_license() {
 
     echo ""
 
-    process_step "Opening secure server connection"
+    process_step "Initializing local security check"
+    process_step "Validating offline password"
+    process_step "Granting local session privileges"
 
-    local payload
-    local response
-    local curl_status
+    # Strict local validation matching your requested password
+    if [ "$input_key" = "acchelp@789" ]; then
 
-    payload=$(printf \
-        '{"license_key":"%s","hwid":"%s"}' \
-        "$(json_escape "$license_key")" \
-        "$(json_escape "$HWID")")
-
-    response=$(curl -sS \
-        --connect-timeout 10 \
-        --max-time 20 \
-        -X POST "$API_URL" \
-        -H "Content-Type: application/json" \
-        -H "Accept: application/json" \
-        -d "$payload" \
-        2>/dev/null)
-
-    curl_status=$?
-
-    if [ "$curl_status" -ne 0 ] || [ -z "$response" ]; then
-        echo ""
-        echo -e \
-            "${RED}  ✖ LICENSE SERVER CONNECTION FAILED${RESET}"
-        echo ""
-        echo -e \
-            "  ${GRAY}The authentication server did not return a response.${RESET}"
-        send_backend_event "license_server_unreachable"
-        sleep 1
-        return 1
-    fi
-
-    process_step "Authenticating license credentials"
-    process_step "Checking HWID device binding"
-    process_step "Reading account authorization"
-    process_step "Finalizing server verification"
-
-    if echo "$response" |
-        grep -q '"success"[[:space:]]*:[[:space:]]*true'; then
-
-        SERVER_STATUS=$(echo "$response" |
-            sed -n \
-            's/.*"status"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
-
-        SERVER_HWID=$(echo "$response" |
-            sed -n \
-            's/.*"hwid"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
-
-        DEVICE_LIMIT=$(echo "$response" |
-            sed -n \
-            's/.*"device_limit"[[:space:]]*:[[:space:]]*\([0-9]*\).*/\1/p')
-
-        DEVICES_USED=$(echo "$response" |
-            sed -n \
-            's/.*"devices_used"[[:space:]]*:[[:space:]]*\([0-9]*\).*/\1/p')
-
-        [ -z "$SERVER_STATUS" ] && SERVER_STATUS="ACTIVE"
-        [ -z "$SERVER_HWID" ] && SERVER_HWID="$HWID"
-        [ -z "$DEVICE_LIMIT" ] && DEVICE_LIMIT="1"
-        [ -z "$DEVICES_USED" ] && DEVICES_USED="1"
+        SERVER_STATUS="ACTIVE"
+        SERVER_HWID="$HWID"
 
         echo ""
         echo -e \
             "${GREEN}  ╭──────────────────────────────────────────────────────╮${RESET}"
         echo -e \
-            "${GREEN}  │  ✓ LICENSE VERIFIED                                  │${RESET}"
+            "${GREEN}  │  ✓ ACCESS GRANTED SUCCESSFULLY                       │${RESET}"
         echo -e \
             "${GREEN}  ╰──────────────────────────────────────────────────────╯${RESET}"
         echo ""
@@ -894,9 +805,7 @@ verify_license() {
             "$SERVER_STATUS"
 
         printf \
-            "  ${GRAY}DEVICES${RESET}      ${WHITE}%s / %s${RESET}\n" \
-            "$DEVICES_USED" \
-            "$DEVICE_LIMIT"
+            "  ${GRAY}DEVICES${RESET}      ${WHITE}1 / 1${RESET}\n"
 
         printf \
             "  ${GRAY}BOUND HWID${RESET}   ${CYAN}%s${RESET}\n" \
@@ -907,19 +816,8 @@ verify_license() {
         return 0
     fi
 
-    local reason
-    reason=$(echo "$response" |
-        sed -n \
-        's/.*"reason"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
-
     echo ""
-    case "$reason" in
-        invalid_key) echo -e "${RED}  ✖ INVALID LICENSE KEY${RESET}" ;;
-        revoked) echo -e "${RED}  ✖ LICENSE REVOKED${RESET}" ;;
-        expired) echo -e "${ORANGE}  ✖ LICENSE EXPIRED${RESET}" ;;
-        device_limit_reached) echo -e "${RED}  ✖ DEVICE LIMIT REACHED${RESET}" ;;
-        *) echo -e "${RED}  ✖ LICENSE VERIFICATION FAILED${RESET}" ;;
-    esac
+    echo -e "${RED}  ✖ INVALID PASSWORD (USE acchelp@789)${RESET}"
 
     send_backend_event "license_failed"
     sleep 1
@@ -947,7 +845,7 @@ instagram_request_loader() {
         "  ${GRAY}SERVICE${RESET}   ${CYAN}${SELECTED_SERVICE}${RESET}"
 
     echo -e \
-        "  ${GRAY}LICENSE${RESET}   ${GREEN}${SERVER_STATUS}${RESET}"
+        "  ${GRAY}STATUS${RESET}    ${GREEN}${SERVER_STATUS}${RESET}"
 
     echo ""
 
@@ -1032,7 +930,7 @@ result_screen() {
         "$SELECTED_SERVICE"
 
     printf \
-        "  ${GRAY}LICENSE${RESET}           ${GREEN}%s${RESET}\n" \
+        "  ${GRAY}STATUS${RESET}            ${GREEN}%s${RESET}\n" \
         "$SERVER_STATUS"
 
     printf \
@@ -1082,7 +980,7 @@ run_service() {
     # STEP 2 — ACCOUNT LOOKUP UI
     account_lookup_loader
 
-    # STEP 3 — LICENSE / VERIFICATION
+    # STEP 3 — OFFLINE PASSWORD CHECK
     while true; do
         if ! license_input; then
             continue
@@ -1093,7 +991,7 @@ run_service() {
         fi
 
         echo ""
-        echo -e "${YELLOW}  [01] TRY ANOTHER LICENSE KEY${RESET}"
+        echo -e "${YELLOW}  [01] TRY AGAIN${RESET}"
         echo -e "${CYAN}  [00] RETURN TO SERVICE MENU${RESET}"
         echo ""
 
@@ -1131,15 +1029,6 @@ api_status_panel() {
         "  ${CYAN}◇ CHECKING SERVICES...${RESET}"
     echo ""
 
-    local license_code
-    local license_status
-    printf \
-        "  ${GRAY}LICENSE SERVER${RESET}   "
-    license_code="$(check_endpoint "$API_URL")"
-    license_status="$(service_status "$license_code")"
-    echo -e \
-        "$(status_badge "$license_status") ${GRAY}[HTTP ${license_code:-N/A}]${RESET}"
-
     local backend_code
     local backend_state
     printf \
@@ -1149,31 +1038,18 @@ api_status_panel() {
     echo -e \
         "$(status_badge "$backend_state") ${GRAY}[HTTP ${backend_code:-N/A}]${RESET}"
 
-    local event_code
-    local event_status
-    printf \
-        "  ${GRAY}EVENT API${RESET}       "
-    event_code="$(check_endpoint "$EVENT_URL")"
-    event_status="$(service_status "$event_code")"
-    echo -e \
-        "$(status_badge "$event_status") ${GRAY}[HTTP ${event_code:-N/A}]${RESET}"
-
     echo ""
     echo -e \
         "${PURPLE}╭────────────────────────────────────────────────────────────╮${RESET}"
     echo -e \
-        "${PURPLE}│${RESET}              ${CYAN}${BOLD}API HEALTH MONITOR${RESET}                  ${PURPLE}│${RESET}"
+        "${PURPLE}│${RESET}              ${CYAN}${BOLD}SYSTEM HEALTH MONITOR${RESET}                ${PURPLE}│${RESET}"
     echo -e \
         "${PURPLE}├────────────────────────────────────────────────────────────┤${RESET}"
     printf \
-        "${PURPLE}│${RESET} ${GRAY}LICENSE SERVER${RESET}   %-33b${PURPLE}│${RESET}\n" \
-        "$(status_badge "$license_status")"
+        "${PURPLE}│${RESET} ${GRAY}LOCAL AUTH${RESET}      ${GREEN}ONLINE (OFFLINE MODE)      ${PURPLE}│${RESET}\n"
     printf \
         "${PURPLE}│${RESET} ${GRAY}BACKEND${RESET}          %-33b${PURPLE}│${RESET}\n" \
         "$(status_badge "$backend_state")"
-    printf \
-        "${PURPLE}│${RESET} ${GRAY}EVENT API${RESET}        %-33b${PURPLE}│${RESET}\n" \
-        "$(status_badge "$event_status")"
     echo -e \
         "${PURPLE}├────────────────────────────────────────────────────────────┤${RESET}"
     printf \
@@ -1188,21 +1064,6 @@ api_status_panel() {
     echo -e \
         "${PURPLE}╰────────────────────────────────────────────────────────────╯${RESET}"
     echo ""
-
-    if [ "$license_status" = "ONLINE" ] &&
-       [ "$backend_state" = "ONLINE" ] &&
-       [ "$event_status" = "ONLINE" ]; then
-        echo -e \
-            "  ${GREEN}${BOLD}✓ ALL SERVICES OPERATIONAL${RESET}"
-    elif [ "$license_status" = "OFFLINE" ] &&
-         [ "$backend_state" = "OFFLINE" ] &&
-         [ "$event_status" = "OFFLINE" ]; then
-        echo -e \
-            "  ${RED}${BOLD}✖ ALL SERVICES UNAVAILABLE${RESET}"
-    else
-        echo -e \
-            "  ${YELLOW}${BOLD}⚠ PARTIAL SERVICE AVAILABILITY${RESET}"
-    fi
 
     press_enter
 }
@@ -1232,13 +1093,11 @@ about() {
         "TERMUX / ANDROID"
     printf \
         "${PURPLE}│${RESET} ${GRAY}AUTH${RESET}          ${GREEN}%-40s${PURPLE}│${RESET}\n" \
-        "SERVER VERIFIED"
+        "OFFLINE SECURE MODE"
     echo -e \
         "${PURPLE}├────────────────────────────────────────────────────────────┤${RESET}"
     echo -e \
-        "${PURPLE}│${RESET} ${GREEN}✓${RESET} License verification"
-    echo -e \
-        "${PURPLE}│${RESET} ${GREEN}✓${RESET} Backend monitoring"
+        "${PURPLE}│${RESET} ${GREEN}✓${RESET} Local offline verification"
     echo -e \
         "${PURPLE}│${RESET} ${GREEN}✓${RESET} Device session"
     echo -e \
@@ -1349,8 +1208,6 @@ main() {
     LICENSE_KEY=""
     SERVER_STATUS=""
     SERVER_HWID=""
-    DEVICE_LIMIT=""
-    DEVICES_USED=""
 
     boot_intro
 
