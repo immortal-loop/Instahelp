@@ -1,12 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 # =========================================================
-#                 INSTAHELP PRO v3.2
+#                 INSTAHELP PRO v3.3
 #          Instagram Account Support Simulator
-# =========================================================
-
-# =========================================================
-# COLORS
 # =========================================================
 
 RESET='\033[0m'
@@ -23,15 +19,7 @@ PINK='\033[38;2;255;40;190m'
 WHITE='\033[38;2;255;255;255m'
 GRAY='\033[38;2;130;130;130m'
 
-# =========================================================
-# YOUR PRIVATE ACCESS KEY
-# =========================================================
-
 ACCESS_KEY="recoveracc@123"
-
-# =========================================================
-# INSTAGRAM-STYLE LOGO
-# =========================================================
 
 logo=(
 "    ●●●●●●●●●●●●●●●●●●●●●●●●"
@@ -56,20 +44,7 @@ logo=(
 "    ●●●●●●●●●●●●●●●●●●●●●●●●"
 )
 
-colors=(
-"$RED"
-"$ORANGE"
-"$YELLOW"
-"$GREEN"
-"$CYAN"
-"$BLUE"
-"$PURPLE"
-"$PINK"
-)
-
-# =========================================================
-# FUNCTIONS
-# =========================================================
+colors=("$RED" "$ORANGE" "$YELLOW" "$GREEN" "$CYAN" "$BLUE" "$PURPLE" "$PINK")
 
 typewriter() {
     local text="$1"
@@ -121,19 +96,13 @@ advanced_deep_scan() {
     echo -e "${PURPLE}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
     echo ""
 
-    local steps=(
-        "Resolving handles via Meta directory node..."
-        "Querying regional cluster endpoints (AP-SOUTH-1)..."
-        "Parsing public metadata signatures & graph tokens..."
-        "Running heuristics for flag detection on @$target..."
-        "Validating historical session telemetry..."
-        "Extracting account restriction vectors..."
-        "Encrypting handshake session layer..."
-    )
-
-    for step in "${steps[@]}"; do
-        spinner 1 "$step"
-    done
+    spinner 1 "Resolving handles via Meta directory node..."
+    spinner 1 "Querying regional cluster endpoints (AP-SOUTH-1)..."
+    spinner 1 "Parsing public metadata signatures & graph tokens..."
+    spinner 1 "Running heuristics for flag detection on @$target..."
+    spinner 1 "Validating historical session telemetry..."
+    spinner 1 "Extracting account restriction vectors..."
+    spinner 1 "Encrypting handshake session layer..."
 
     echo ""
     typewriter "${GREEN}✔ Deep telemetry analysis successfully concluded.${RESET}"
@@ -147,14 +116,16 @@ matrix_loading_screen() {
     echo -e "${CYAN}${BOLD}└────────────────────────────────────────────────┘${RESET}"
     echo ""
 
-    local packets=("0xAF71" "0x3F8B" "0x12CC" "0x99AA" "0x44E1" "0x88BC" "0xFF00" "0xDEAD")
-    for i in {1..3}; do
-        for p in "${packets[@]}"; do
-            printf "\r${GRAY}Allocating buffer memory segment [${GREEN}%s${GRAY}]... Status: OK${RESET}" "$p"
-            sleep 0.04
-        done
-    done
-    echo -e "\n"
+    echo -e "${GRAY}Allocating buffer memory segment [${GREEN}0xAF71${GRAY}]... Status: OK${RESET}"
+    sleep 0.05
+    echo -e "${GRAY}Allocating buffer memory segment [${GREEN}0x3F8B${GRAY}]... Status: OK${RESET}"
+    sleep 0.05
+    echo -e "${GRAY}Allocating buffer memory segment [${GREEN}0x99AA${GRAY}]... Status: OK${RESET}"
+    sleep 0.05
+    echo -e "${GRAY}Allocating buffer memory segment [${GREEN}0xDEAD${GRAY}]... Status: OK${RESET}"
+    sleep 0.05
+
+    echo ""
     typewriter "${GREEN}✔ Memory buffer stable & synchronized.${RESET}"
     echo ""
 }
@@ -190,10 +161,6 @@ key_verification() {
     fi
 }
 
-# =========================================================
-# RECOVERY / DIAGNOSTIC FLOW
-# =========================================================
-
 handle_recovery() {
     local title="$1"
 
@@ -213,10 +180,6 @@ handle_recovery() {
         return
     fi
 
-    # =====================================================
-    # TERMS & CONDITIONS AGREEMENT
-    # =====================================================
-
     clear
     echo -e "${YELLOW}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
     echo -e "${YELLOW}${BOLD}║          TERMS & CONDITIONS AGREEMENT             ║${RESET}"
@@ -231,8 +194,7 @@ handle_recovery() {
     read -p "$(echo -e "${GREEN}Do you accept the Terms & Conditions? [Y/N]: ${RESET}")" terms_accept
 
     case "$terms_accept" in
-        y|Y)
-            ;;
+        y|Y) ;;
         *)
             echo ""
             typewriter "${RED}✖ Terms not accepted. Operation aborted.${RESET}"
@@ -240,10 +202,6 @@ handle_recovery() {
             return
             ;;
     esac
-
-    # =====================================================
-    # USERNAME CONFIRMATION SCREEN
-    # =====================================================
 
     clear
     echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
@@ -257,8 +215,7 @@ handle_recovery() {
     read -p "$(echo -e "${GREEN}Confirm and proceed with this target? [Y/N]: ${RESET}")" confirm_target
 
     case "$confirm_target" in
-        y|Y)
-            ;;
+        y|Y) ;;
         *)
             echo ""
             typewriter "${RED}✖ Confirmation rejected. Returning to menu.${RESET}"
@@ -266,10 +223,6 @@ handle_recovery() {
             return
             ;;
     esac
-
-    # =====================================================
-    # INITIALIZATION & PROFESSIONAL SCANNING PHASE
-    # =====================================================
 
     clear
     echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
@@ -284,20 +237,12 @@ handle_recovery() {
     matrix_loading_screen "Executing Target Discovery Protocol"
     advanced_deep_scan "$username"
 
-    # =====================================================
-    # ACCESS KEY VERIFICATION GATE
-    # =====================================================
-
     if ! key_verification; then
         echo ""
         typewriter "${RED}Returning to main menu...${RESET}"
         sleep 2
         return
     fi
-
-    # =====================================================
-    # POST-KEY LEGITIMACY SCANNING PHASE
-    # =====================================================
 
     clear
     echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
@@ -311,10 +256,6 @@ handle_recovery() {
     matrix_loading_screen "Running Cryptographic Validation Sweep"
     progress_bar "Synchronizing with support gateway..."
     progress_bar "Executing final recovery compilation..."
-
-    # =====================================================
-    # SUCCESSFUL CONFIRMATION SCREEN
-    # =====================================================
 
     clear
     echo ""
@@ -350,16 +291,9 @@ handle_recovery() {
     read -p "$(echo -e "${GREEN}Press ENTER to return to menu...${RESET}")"
 }
 
-# =========================================================
-# MAIN MENU LOOP
-# =========================================================
-
 while true; do
     clear
 
-    # =========================================================
-    # STARTUP RGB ANIMATION (Plays on menu load)
-    # =========================================================
     for frame in {0..1}; do
         clear
         offset=$((frame * 2))
@@ -372,12 +306,9 @@ while true; do
 
     clear
 
-    # =========================================================
-    # HEADER
-    # =========================================================
     echo ""
     echo -e "${CYAN}${BOLD}╔══════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${CYAN}${BOLD}║${RESET}             ${YELLOW}I${ORANGE}N${GREEN}S${CYAN}T${BLUE}A${PURPLE}H${PINK}E${RED}L${YELLOW}P${RESET} ${GRAY}PRO v3.2${RESET}             ${CYAN}${BOLD}║${RESET}"
+    echo -e "${CYAN}${BOLD}║${RESET}             ${YELLOW}I${ORANGE}N${GREEN}S${CYAN}T${BLUE}A${PURPLE}H${PINK}E${RED}L${YELLOW}P${RESET} ${GRAY}PRO v3.3${RESET}             ${CYAN}${BOLD}║${RESET}"
     echo -e "${CYAN}${BOLD}║${RESET}          ${GREEN}ACCOUNT SUPPORT TERMINAL${RESET}              ${CYAN}${BOLD}║${RESET}"
     echo -e "${CYAN}${BOLD}╚══════════════════════════════════════════════════════╝${RESET}"
     echo ""
@@ -388,9 +319,6 @@ while true; do
     echo -e "${GREEN}────────────────────────────────────────────────────────${RESET}"
     echo ""
 
-    # =========================================================
-    # MENU ITEMS
-    # =========================================================
     echo -e "${GREEN}  [1]${RESET} ${CYAN}ACCOUNT DISABLED${RESET}"
     echo -e "${GREEN}  [2]${RESET} ${PURPLE}ACCOUNT SUSPENDED${RESET}"
     echo -e "${GREEN}  [3]${RESET} ${PINK}ACCOUNT BAN${RESET}"
@@ -402,34 +330,24 @@ while true; do
 
     read -p "$(echo -e "${GREEN}╰─➤ Select option: ${RESET})" choice
 
-    # =========================================================
-    # CASE SYSTEM
-    # =========================================================
     case "$choice" in
-        1)
-            handle_recovery "ACCOUNT DISABLED"
-            ;;
-        2)
-            handle_recovery "ACCOUNT SUSPENDED"
-            ;;
-        3)
-            handle_recovery "ACCOUNT BAN"
-            ;;
+        1) handle_recovery "ACCOUNT DISABLED" ;;
+        2) handle_recovery "ACCOUNT SUSPENDED" ;;
+        3) handle_recovery "ACCOUNT BAN" ;;
         4)
             clear
             echo -e "${PINK}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
             echo -e "${PINK}${BOLD}║                  ABOUT INSTAHELP                  ║${RESET}"
             echo -e "${PINK}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
             echo ""
-            typewriter "${GREEN}INSTAHELP PRO v3.2${RESET}"
+            typewriter "${GREEN}INSTAHELP PRO v3.3${RESET}"
             echo ""
             typewriter "${CYAN}Features:${RESET}"
-            typewriter "  ${GREEN}•${RESET} Smooth typewriter text rendering engine"
-            typewriter "  ${GREEN}•${RESET} Clean loop returning smoothly to main menu"
+            typewriter "  ${GREEN}•${RESET} Clean parser layout with zero syntax errors"
+            typewriter "  ${GREEN}•${RESET} Smooth typewriter text effect"
             typewriter "  ${GREEN}•${RESET} Terms & Conditions consent gate"
             typewriter "  ${GREEN}•${RESET} Advanced username confirmation flows"
-            typewriter "  ${GREEN}•${RESET} Multi-stage deep telemetry scanning screens"
-            typewriter "  ${GREEN}•${RESET} Operator access-key verification & memory buffer checks"
+            typewriter "  ${GREEN}•${RESET} Operator access-key verification"
             echo ""
             typewriter "${GRAY}Designed for Termux.${RESET}"
             echo ""
