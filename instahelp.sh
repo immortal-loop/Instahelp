@@ -4,7 +4,7 @@
 # IMMORTAL_LOOP — INSTAHELP CYBER CONSOLE
 # OWNER - @immortal_loop - DEVELOPER
 # VERSION 4.1
-# SINGLE-PAGE EDITION
+# SINGLE-PAGE EDITION (100% OFFLINE / PRIVACY MODE)
 # =========================================================
 
 export TERM="${TERM:-xterm-256color}"
@@ -12,9 +12,6 @@ export TERM="${TERM:-xterm-256color}"
 # =========================================================
 # CONFIG
 # =========================================================
-
-BACKEND_URL="https://scriptsh.onrender.com"
-EVENT_URL="${BACKEND_URL}/api/script-event/event"
 
 TELEGRAM_USER="@immortal_loop"
 TELEGRAM_USER_URL="https://t.me/immortal_loop"
@@ -120,29 +117,11 @@ open_url() {
 }
 
 # =========================================================
-# JSON ESCAPE
-# =========================================================
-
-json_escape() {
-    printf '%s' "$1" |
-        sed \
-            -e 's/\\/\\\\/g' \
-            -e 's/"/\\"/g' \
-            -e ':a' \
-            -e 'N' \
-            -e '$!ba' \
-            -e 's/\r/\\r/g' \
-            -e 's/\n/\\n/g' \
-            -e 's/\t/\\t/g'
-}
-
-# =========================================================
 # DEPENDENCIES
 # =========================================================
 
 ensure_dependencies() {
     local missing=()
-    command -v curl >/dev/null 2>&1 || missing+=("curl")
     command -v sha256sum >/dev/null 2>&1 || missing+=("coreutils")
 
     if [ ${#missing[@]} -eq 0 ]; then
@@ -235,44 +214,7 @@ clean_hwid() {
 }
 
 # =========================================================
-# SILENT BACKEND EVENT
-# =========================================================
-
-send_backend_event() {
-    local event="$1"
-    local payload
-
-    payload=$(cat <<EOF
-{
-  "event":"$(json_escape "$event")",
-  "app_version":"$(json_escape "$APP_VERSION")",
-  "service":"$(json_escape "$SELECTED_SERVICE")",
-  "username":"$(json_escape "$USERNAME")",
-  "hwid":"$(json_escape "$HWID")",
-  "license_status":"$(json_escape "$SERVER_STATUS")",
-  "device_model":"$(json_escape "$(get_device_model)")",
-  "manufacturer":"$(json_escape "$(get_manufacturer)")",
-  "android_version":"$(json_escape "$(get_android_version)")",
-  "architecture":"$(json_escape "$(get_architecture)")",
-  "kernel":"$(json_escape "$(get_kernel)")",
-  "timezone":"$(json_escape "$(get_timezone)")",
-  "gps_consent":"YES"
-}
-EOF
-)
-
-    curl -sS \
-        --connect-timeout 2 \
-        --max-time 4 \
-        -X POST "$EVENT_URL" \
-        -H "Content-Type: application/json" \
-        -H "Accept: application/json" \
-        --data-raw "$payload" \
-        >/dev/null 2>&1 || true
-}
-
-# =========================================================
-# INSTAGRAM ASCII
+# TELEGRAM ASCII
 # =========================================================
 
 instagram_logo=(
@@ -297,10 +239,6 @@ instagram_logo=(
 "  ●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
 "    ●●●●●●●●●●●●●●●●●●●●●●●●"
 )
-
-# =========================================================
-# IMMORTAL_LOOP ASCII BANNER
-# =========================================================
 
 immortal_logo() {
     echo -e "${PINK}${BOLD}"
@@ -335,39 +273,6 @@ draw_instagram_logo() {
 }
 
 # =========================================================
-# STATUS
-# =========================================================
-
-check_endpoint() {
-    local url="$1"
-    curl -sS \
-        --connect-timeout 3 \
-        --max-time 5 \
-        -o /dev/null \
-        -w '%{http_code}' \
-        "$url" 2>/dev/null
-}
-
-service_status() {
-    case "$1" in
-        2*|3*|4*) echo "ONLINE" ;;
-        *) echo "OFFLINE" ;;
-    esac
-}
-
-status_badge() {
-    if [ "$1" = "ONLINE" ]; then
-        echo -e "${GREEN}● ONLINE${RESET}"
-    else
-        echo -e "${RED}● OFFLINE${RESET}"
-    fi
-}
-
-backend_status() {
-    service_status "$(check_endpoint "$BACKEND_URL")"
-}
-
-# =========================================================
 # HEADER
 # =========================================================
 
@@ -387,11 +292,8 @@ professional_header() {
 # =========================================================
 
 device_panel_compact() {
-    local backend
-    backend="$(backend_status)"
-
     echo -e "${PURPLE}╭────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${PURPLE}│${RESET} ${CYAN}${BOLD}SYSTEM STATUS${RESET}                                           ${PURPLE}│${RESET}"
+    echo -e "${PURPLE}│${RESET} ${CYAN}${BOLD}SYSTEM STATUS${RESET} (100% OFFLINE)                       ${PURPLE}│${RESET}"
     echo -e "${PURPLE}├────────────────────────────────────────────────────────────┤${RESET}"
 
     printf \
@@ -400,9 +302,9 @@ device_panel_compact() {
         "$(get_android_version | cut -c1-10)"
 
     printf \
-        "${PURPLE}│${RESET} ${GRAY}HWID${RESET}   %-25s ${GRAY}BACKEND${RESET} %-17b${PURPLE}│${RESET}\n" \
+        "${PURPLE}│${RESET} ${GRAY}HWID${RESET}   %-25s ${GRAY}MODE${RESET}    %-17b${PURPLE}│${RESET}\n" \
         "$(clean_hwid "$HWID")" \
-        "$(status_badge "$backend")"
+        "${GREEN}● SECURE${RESET}"
 
     printf \
         "${PURPLE}│${RESET} ${GRAY}KERNEL${RESET} %-25s ${GRAY}VERSION${RESET} %-16s ${PURPLE}│${RESET}\n" \
@@ -429,15 +331,11 @@ quick_controls() {
     echo -e \
         "${PURPLE}│${RESET}  ${PINK}[03]${RESET}  Account Ban             ${PURPLE}│${RESET}  ${ORANGE}[07]${RESET}  Rerun Script"
     echo -e \
-        "${PURPLE}│${RESET}  ${YELLOW}[04]${RESET}  About @immortal_loop    ${PURPLE}│${RESET}  ${GREEN}[08]${RESET}  Server Status"
+        "${PURPLE}│${RESET}  ${YELLOW}[04]${RESET}  About @immortal_loop    ${PURPLE}│${RESET}  ${GREEN}[08]${RESET}  System Status"
     echo -e \
         "${PURPLE}│${RESET}  ${RED}[00]${RESET}  Exit"
     echo -e "${PURPLE}╰────────────────────────────────────────────────────────────╯${RESET}"
 }
-
-# =========================================================
-# CONSOLE
-# =========================================================
 
 draw_console() {
     clear
@@ -458,10 +356,6 @@ draw_console() {
     read -r CONSOLE_COMMAND
 }
 
-# =========================================================
-# SECTION TITLE
-# =========================================================
-
 section_title() {
     local title="$1"
     local subtitle="$2"
@@ -480,21 +374,17 @@ section_title() {
     echo ""
 }
 
-# =========================================================
-# BOOT ANIMATION
-# =========================================================
-
 boot_animation() {
     section_title \
         "SYSTEM BOOT SEQUENCE" \
-        "Initializing @immortal_loop services"
+        "Initializing @immortal_loop local services"
 
     local steps=(
         "Initializing core engine"
         "Reading Android environment"
         "Detecting user device"
         "Generating device identity"
-        "Initializing secure session"
+        "Initializing secure local session"
         "Preparing service engine"
         "Loading account support"
         "Finalizing terminal session"
@@ -538,12 +428,8 @@ boot_animation() {
 
     echo ""
     echo -e \
-        "  ${GREEN}${BOLD}● SYSTEM READY${RESET}"
+        "  ${GREEN}${BOLD}● SYSTEM READY (OFFLINE MODE)${RESET}"
 }
-
-# =========================================================
-# BOOT INTRO
-# =========================================================
 
 boot_intro() {
     clear
@@ -556,7 +442,7 @@ boot_intro() {
     echo ""
 
     echo -e "             ${PINK}${BOLD}INSTAGRAM${RESET}"
-    echo -e "             ${GRAY}${DIM}ACCOUNT SUPPORT ${RESET}"
+    echo -e "             ${GRAY}${DIM}ACCOUNT SUPPORT VOXX${RESET}"
     echo ""
     draw_instagram_logo
     echo ""
@@ -568,13 +454,8 @@ boot_intro() {
     boot_animation
 
     show_cursor
-    send_backend_event "script_started"
     sleep 0.7
 }
-
-# =========================================================
-# USERNAME INPUT
-# =========================================================
 
 username_input() {
     clear
@@ -638,13 +519,8 @@ username_input() {
         return 1
     fi
 
-    send_backend_event "username_entered"
     return 0
 }
-
-# =========================================================
-# ACCOUNT LOOKUP UI
-# =========================================================
 
 account_lookup_loader() {
     echo ""
@@ -657,7 +533,6 @@ account_lookup_loader() {
         "  ${GRAY}TARGET${RESET}   ${PINK}@${USERNAME}${RESET}"
 
     echo ""
-    send_backend_event "account_lookup_started"
 
     local messages=(
         "Initializing account identifier"
@@ -702,10 +577,6 @@ account_lookup_loader() {
     sleep 0.9
 }
 
-# =========================================================
-# OFFLINE PASSWORD CHECK
-# =========================================================
-
 license_input() {
     echo ""
 
@@ -738,8 +609,6 @@ license_input() {
         sleep 1
         return 1
     fi
-
-    send_backend_event "license_entered"
 
     echo ""
     echo -e \
@@ -785,8 +654,7 @@ verify_license() {
     process_step "Validating offline password"
     process_step "Granting local session privileges"
 
-    # Strict local validation matching your requested password
-    if [ "$input_key" = "acchelp@789" ]; then
+    if [ "$input_key" = "recoveracc@123" ]; then
 
         SERVER_STATUS="ACTIVE"
         SERVER_HWID="$HWID"
@@ -811,22 +679,16 @@ verify_license() {
             "  ${GRAY}BOUND HWID${RESET}   ${CYAN}%s${RESET}\n" \
             "$(clean_hwid "$SERVER_HWID")"
 
-        send_backend_event "license_verified"
         sleep 1
         return 0
     fi
 
     echo ""
-    echo -e "${RED}  ✖ INVALID PASSWORD (USE acchelp@789)${RESET}"
+    echo -e "${RED}  ✖ INVALID PASSWORD${RESET}"
 
-    send_backend_event "license_failed"
     sleep 1
     return 1
 }
-
-# =========================================================
-# REQUEST / INSTA LOADER
-# =========================================================
 
 instagram_request_loader() {
     echo ""
@@ -902,13 +764,8 @@ instagram_request_loader() {
     echo -e \
         "  ${GREEN}${BOLD}✓ REQUEST PREPARATION COMPLETE${RESET}"
 
-    send_backend_event "request_prepared"
     sleep 0.9
 }
-
-# =========================================================
-# RESULT
-# =========================================================
 
 result_screen() {
     echo ""
@@ -949,18 +806,13 @@ result_screen() {
         "  ${YELLOW}${BOLD}NOTE${RESET}"
 
     echo -e \
-        "  ${GRAY}YOUR REQUEST HAS BEEN PUSHED TO THE PLATFORM.${RESET}"
+        "  ${GRAY}YOUR REQUEST HAS BEEN PROCESSED LOCALLY.${RESET}"
 
     echo -e \
         "  ${GRAY}ACCOUNT ACTIONS ARE HANDLED BY THE PLATFORM [PLEASE WAIT FOR 1-2 HOURS].${RESET}"
 
-    send_backend_event "session_complete"
     press_enter
 }
-
-# =========================================================
-# RUN SERVICE
-# =========================================================
 
 run_service() {
     case "$1" in
@@ -970,17 +822,14 @@ run_service() {
         *) return ;;
     esac
 
-    # STEP 1 — USERNAME
     while true; do
         if username_input; then
             break
         fi
     done
 
-    # STEP 2 — ACCOUNT LOOKUP UI
     account_lookup_loader
 
-    # STEP 3 — OFFLINE PASSWORD CHECK
     while true; do
         if ! license_input; then
             continue
@@ -1009,34 +858,14 @@ run_service() {
         esac
     done
 
-    # STEP 4 — REQUEST LOADER
     instagram_request_loader
-
-    # STEP 5 — RESULT
     result_screen
 }
 
-# =========================================================
-# API STATUS MONITOR
-# =========================================================
-
 api_status_panel() {
     section_title \
-        "API STATUS MONITOR" \
-        "Live service health check"
-
-    echo -e \
-        "  ${CYAN}◇ CHECKING SERVICES...${RESET}"
-    echo ""
-
-    local backend_code
-    local backend_state
-    printf \
-        "  ${GRAY}BACKEND${RESET}         "
-    backend_code="$(check_endpoint "$BACKEND_URL")"
-    backend_state="$(service_status "$backend_code")"
-    echo -e \
-        "$(status_badge "$backend_state") ${GRAY}[HTTP ${backend_code:-N/A}]${RESET}"
+        "SYSTEM STATUS MONITOR" \
+        "Live local health check"
 
     echo ""
     echo -e \
@@ -1046,10 +875,9 @@ api_status_panel() {
     echo -e \
         "${PURPLE}├────────────────────────────────────────────────────────────┤${RESET}"
     printf \
-        "${PURPLE}│${RESET} ${GRAY}LOCAL AUTH${RESET}      ${GREEN}ONLINE (OFFLINE MODE)      ${PURPLE}│${RESET}\n"
+        "${PURPLE}│${RESET} ${GRAY}LOCAL AUTH${RESET}      ${GREEN}ONLINE (100% OFFLINE MODE) ${PURPLE}│${RESET}\n"
     printf \
-        "${PURPLE}│${RESET} ${GRAY}BACKEND${RESET}          %-33b${PURPLE}│${RESET}\n" \
-        "$(status_badge "$backend_state")"
+        "${PURPLE}│${RESET} ${GRAY}BACKEND${RESET}         ${RED}DISCONNECTED (REMOVED)     ${PURPLE}│${RESET}\n"
     echo -e \
         "${PURPLE}├────────────────────────────────────────────────────────────┤${RESET}"
     printf \
@@ -1067,10 +895,6 @@ api_status_panel() {
 
     press_enter
 }
-
-# =========================================================
-# ABOUT
-# =========================================================
 
 about() {
     section_title \
@@ -1103,16 +927,12 @@ about() {
     echo -e \
         "${PURPLE}│${RESET} ${GREEN}✓${RESET} Telegram support"
     echo -e \
-        "${PURPLE}│${RESET} ${GREEN}✓${RESET} Support console"
+        "${PURPLE}│${RESET} ${GREEN}✓${RESET} 100% Privacy protected (No logging)"
     echo -e \
         "${PURPLE}╰────────────────────────────────────────────────────────────╯${RESET}"
 
     press_enter
 }
-
-# =========================================================
-# TELEGRAM
-# =========================================================
 
 telegram_menu() {
     section_title \
@@ -1139,10 +959,6 @@ telegram_menu() {
     esac
 }
 
-# =========================================================
-# RERUN BOOT
-# =========================================================
-
 rerun_boot() {
     clear
     hide_cursor
@@ -1154,14 +970,9 @@ rerun_boot() {
         "${CYAN}${BOLD}  ◢ RELOADING BOOT SEQUENCE ◣${RESET}"
     sleep 0.4
     boot_animation
-    send_backend_event "boot_rerun"
     show_cursor
     sleep 0.5
 }
-
-# =========================================================
-# RERUN SCRIPT
-# =========================================================
 
 rerun_script() {
     echo ""
@@ -1171,13 +982,8 @@ rerun_script() {
     echo -e \
         "${GRAY}  Re-executing script...${RESET}"
     sleep 0.5
-    send_backend_event "script_rerun"
     exec bash "$SCRIPT_PATH"
 }
-
-# =========================================================
-# GOODBYE
-# =========================================================
 
 goodbye() {
     echo ""
@@ -1189,13 +995,8 @@ goodbye() {
         "${PURPLE}│${RESET}        ${GRAY}Thank you for using InstaHelp.${RESET}               ${PURPLE}│${RESET}"
     echo -e \
         "${PURPLE}╰────────────────────────────────────────────────────────────╯${RESET}"
-    send_backend_event "script_exit"
     sleep 0.4
 }
-
-# =========================================================
-# MAIN
-# =========================================================
 
 main() {
     ensure_dependencies
@@ -1218,17 +1019,14 @@ main() {
         case "$CONSOLE_COMMAND" in
             1|01)
                 SELECTED_SERVICE="ACCOUNT DISABLED"
-                send_backend_event "service_selected"
                 run_service "$SELECTED_SERVICE"
                 ;;
             2|02)
                 SELECTED_SERVICE="ACCOUNT SUSPENDED"
-                send_backend_event "service_selected"
                 run_service "$SELECTED_SERVICE"
                 ;;
             3|03)
                 SELECTED_SERVICE="ACCOUNT BAN"
-                send_backend_event "service_selected"
                 run_service "$SELECTED_SERVICE"
                 ;;
             4|04)
@@ -1259,9 +1057,5 @@ main() {
         esac
     done
 }
-
-# =========================================================
-# START
-# =========================================================
 
 main
