@@ -2,10 +2,12 @@
 
 # =========================================================
 #                 INSTAHELP PRO v3.0
-#          ADVANCED TERMINAL SUPPORT UI
+#             TERMUX ACCOUNT SUPPORT CLI
 # =========================================================
 
-# ---------------- COLORS ----------------
+# =========================================================
+# COLORS
+# =========================================================
 
 RESET='\033[0m'
 BOLD='\033[1m'
@@ -26,15 +28,782 @@ GRAY='\033[38;2;125;125;125m'
 # OPERATOR ACCESS KEY
 # =========================================================
 
+# Change this to your own local operator key.
+# This is NOT an Instagram password.
+
 ACCESS_KEY="recoveracc@123"
 
 # =========================================================
-# TERMINAL SETTINGS
+# RGB INSTAGRAM LOGO
 # =========================================================
 
-ESC='\033'
-HIDE_CURSOR="${ESC}[?25l"
-SHOW_CURSOR="${ESC}[?25h"
+logo=(
+"    ●●●●●●●●●●●●●●●●●●●●●●●●"
+"  ●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                    ●●●   ●●"
+" ●●         ●●●●●●●●   ●●●   ●●"
+" ●●       ●●●      ●●●       ●●"
+" ●●      ●●          ●●      ●●"
+" ●●      ●●          ●●      ●●"
+" ●●      ●●          ●●      ●●"
+" ●●      ●●          ●●      ●●"
+" ●●       ●●●      ●●●       ●●"
+" ●●         ●●●●●●●●         ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+" ●●                          ●●"
+"  ●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
+"    ●●●●●●●●●●●●●●●●●●●●●●●●"
+)
+
+# =========================================================
+# RGB LOGO ANIMATION
+# =========================================================
+
+rgb_logo() {
+
+    local colors=(
+        "$RED"
+        "$ORANGE"
+        "$YELLOW"
+        "$GREEN"
+        "$CYAN"
+        "$BLUE"
+        "$PURPLE"
+        "$PINK"
+    )
+
+    # Short RGB animation
+    for frame in 0 1 2; do
+
+        clear
+
+        local offset=$((frame * 2))
+
+        for i in "${!logo[@]}"; do
+
+            local color_index=$(( (i + offset) % ${#colors[@]} ))
+
+            printf "%b%s%b\n" \
+                "${colors[$color_index]}" \
+                "${logo[$i]}" \
+                "$RESET"
+
+        done
+
+        sleep 0.12
+
+    done
+
+    # Final logo
+    clear
+
+    local i=0
+
+    for line_text in "${logo[@]}"; do
+
+        case $((i % 8)) in
+
+            0)
+                printf "%b%s%b\n" "$YELLOW" "$line_text" "$RESET"
+                ;;
+
+            1)
+                printf "%b%s%b\n" "$ORANGE" "$line_text" "$RESET"
+                ;;
+
+            2)
+                printf "%b%s%b\n" "$RED" "$line_text" "$RESET"
+                ;;
+
+            3)
+                printf "%b%s%b\n" "$PINK" "$line_text" "$RESET"
+                ;;
+
+            4)
+                printf "%b%s%b\n" "$PURPLE" "$line_text" "$RESET"
+                ;;
+
+            5)
+                printf "%b%s%b\n" "$BLUE" "$line_text" "$RESET"
+                ;;
+
+            6)
+                printf "%b%s%b\n" "$CYAN" "$line_text" "$RESET"
+                ;;
+
+            7)
+                printf "%b%s%b\n" "$GREEN" "$line_text" "$RESET"
+                ;;
+
+        esac
+
+        ((i++))
+
+    done
+
+    sleep 0.8
+}
+
+# =========================================================
+# BASIC UI FUNCTIONS
+# =========================================================
+
+line() {
+
+    printf "${GREEN}────────────────────────────────────────────────────────────${RESET}\n"
+
+}
+
+header() {
+
+    printf "${CYAN}${BOLD}╔══════════════════════════════════════════════════════════╗${RESET}\n"
+
+    printf "${CYAN}${BOLD}║${RESET}              ${YELLOW}I${ORANGE}N${GREEN}S${CYAN}T${BLUE}A${PURPLE}H${PINK}E${RED}L${YELLOW}P${RESET} ${GRAY}PRO v3.0${RESET}             ${CYAN}${BOLD}║${RESET}\n"
+
+    printf "${CYAN}${BOLD}║${RESET}             ${GREEN}ACCOUNT SUPPORT TERMINAL${RESET}             ${CYAN}${BOLD}║${RESET}\n"
+
+    printf "${CYAN}${BOLD}╚══════════════════════════════════════════════════════════╝${RESET}\n"
+
+}
+
+info() {
+
+    printf "${CYAN}[*]${RESET} %s\n" "$1"
+
+}
+
+success() {
+
+    printf "${GREEN}[✓]${RESET} %s\n" "$1"
+
+}
+
+warning() {
+
+    printf "${YELLOW}[!]${RESET} %s\n" "$1"
+
+}
+
+error() {
+
+    printf "${RED}[-]${RESET} %s\n" "$1"
+
+}
+
+# =========================================================
+# SPINNER
+# =========================================================
+
+spinner() {
+
+    local duration="$1"
+    local message="$2"
+
+    local frames=(
+        "⠋"
+        "⠙"
+        "⠹"
+        "⠸"
+        "⠼"
+        "⠴"
+        "⠦"
+        "⠧"
+        "⠇"
+        "⠏"
+    )
+
+    local start=$SECONDS
+    local i=0
+
+    while [ $((SECONDS-start)) -lt "$duration" ]; do
+
+        printf "\r${CYAN}${frames[$i]}${RESET} ${WHITE}%-58s${RESET}" "$message"
+
+        i=$(( (i + 1) % ${#frames[@]} ))
+
+        sleep 0.07
+
+    done
+
+    printf "\r${GREEN}✔${RESET} ${WHITE}%-58s${RESET}\n" "$message"
+
+}
+
+# =========================================================
+# PROGRESS BAR
+# =========================================================
+
+progress() {
+
+    local title="$1"
+    local width=30
+
+    for ((i=0; i<=width; i++)); do
+
+        local percent=$((i * 100 / width))
+
+        local filled
+        local empty
+
+        filled=$(printf "%${i}s" | tr ' ' '█')
+        empty=$(printf "%$((width-i))s" | tr ' ' '░')
+
+        printf "\r${CYAN}%-34s${RESET} ${GREEN}%s${GRAY}%s${RESET} ${YELLOW}%3d%%${RESET}" \
+            "$title" \
+            "$filled" \
+            "$empty" \
+            "$percent"
+
+        sleep 0.035
+
+    done
+
+    printf "\n"
+
+}
+
+# =========================================================
+# USERNAME SCANNER
+# =========================================================
+
+scan() {
+
+    printf "\n"
+
+    printf "${PURPLE}${BOLD}╭──────────────────── USERNAME SCANNER ────────────────────╮${RESET}\n"
+
+    local frames=(
+        "▱────────────"
+        "━▱───────────"
+        "━━━▱─────────"
+        "━━━━━▱───────"
+        "━━━━━━━▱─────"
+        "━━━━━━━━━▱───"
+        "━━━━━━━━━━━▱─"
+        "━━━━━━━━━━━━━"
+    )
+
+    for round in {1..5}; do
+
+        for frame in "${frames[@]}"; do
+
+            printf "\r${PURPLE}│${RESET} ${CYAN}Scanning${RESET} ${GREEN}${frame}${RESET} ${GRAY}Analyzing target...${RESET}"
+
+            sleep 0.07
+
+        done
+
+    done
+
+    printf "\r${PURPLE}│${RESET} ${GREEN}✔ Scan completed successfully${RESET}                         \n"
+
+    printf "${PURPLE}${BOLD}╰──────────────────────────────────────────────────────────╯${RESET}\n"
+
+}
+
+# =========================================================
+# ACCESS KEY VERIFICATION
+# =========================================================
+
+verify_key() {
+
+    printf "\n"
+
+    printf "${YELLOW}${BOLD}╭──────────────────── AUTHORIZATION ───────────────────────╮${RESET}\n"
+
+    printf "${YELLOW}│${RESET} ${WHITE}Operator authorization required to continue.${RESET}\n"
+
+    printf "${YELLOW}│${RESET} ${GRAY}This is the local access key configured by you.${RESET}\n"
+
+    printf "${YELLOW}${BOLD}╰──────────────────────────────────────────────────────────╯${RESET}\n"
+
+    printf "\n"
+
+    read -r -s -p "$(printf "${CYAN}Access key ➜ ${RESET}")" entered
+
+    printf "\n"
+
+    spinner 2 "Verifying operator authorization"
+
+    if [ "$entered" = "$ACCESS_KEY" ]; then
+
+        success "Authorization accepted."
+
+        sleep 1
+
+        return 0
+
+    else
+
+        error "Authorization rejected."
+
+        sleep 1
+
+        return 1
+
+    fi
+
+}
+
+# =========================================================
+# ACCOUNT DIAGNOSTIC
+# =========================================================
+
+diagnose_account() {
+
+    local issue="$1"
+    local issue_color="$2"
+
+    clear
+
+    header
+
+    printf "\n"
+
+    printf "${GRAY}Selected issue:${RESET} ${issue_color}${BOLD}${issue}${RESET}\n"
+
+    printf "\n"
+
+    line
+
+    printf "\n"
+
+    # -----------------------------------------------------
+    # USERNAME
+    # -----------------------------------------------------
+
+    printf "${CYAN}${BOLD}TARGET IDENTIFICATION${RESET}\n"
+
+    printf "\n"
+
+    read -r -p "$(printf "${GREEN}Username ➜ ${RESET}")" username
+
+    if [ -z "$username" ]; then
+
+        printf "\n"
+
+        error "Username cannot be empty."
+
+        sleep 2
+
+        return
+
+    fi
+
+    # Remove @ if user enters it
+    username="${username#@}"
+
+    printf "\n"
+
+    printf "${WHITE}Target:${RESET} ${CYAN}@${username}${RESET}\n"
+
+    printf "\n"
+
+    # -----------------------------------------------------
+    # INITIALIZATION
+    # -----------------------------------------------------
+
+    spinner 1 "Initializing diagnostic engine"
+
+    spinner 1 "Loading account analysis modules"
+
+    spinner 1 "Preparing username scanner"
+
+    spinner 1 "Creating diagnostic session"
+
+    printf "\n"
+
+    # -----------------------------------------------------
+    # CONFIRMATION
+    # -----------------------------------------------------
+
+    printf "${YELLOW}${BOLD}╭──────────────────── TARGET CONFIRMATION ────────────────╮${RESET}\n"
+
+    printf "${YELLOW}│${RESET} Username : ${CYAN}@${username}${RESET}\n"
+
+    printf "${YELLOW}│${RESET} Issue    : ${issue_color}${issue}${RESET}\n"
+
+    printf "${YELLOW}│${RESET}\n"
+
+    printf "${YELLOW}│${RESET} Is this your username?\n"
+
+    printf "${YELLOW}│${RESET} Have you authorized this diagnostic?\n"
+
+    printf "${YELLOW}${BOLD}╰──────────────────────────────────────────────────────────╯${RESET}\n"
+
+    printf "\n"
+
+    read -r -p "$(printf "${GREEN}Continue? [Y/N] ➜ ${RESET}")" confirm
+
+    case "$confirm" in
+
+        y|Y)
+            ;;
+
+        n|N)
+
+            printf "\n"
+
+            warning "Diagnostic cancelled."
+
+            sleep 2
+
+            return
+
+            ;;
+
+        *)
+
+            printf "\n"
+
+            error "Invalid response. Please enter Y or N."
+
+            sleep 2
+
+            return
+
+            ;;
+
+    esac
+
+    # -----------------------------------------------------
+    # DIAGNOSTIC ENGINE
+    # -----------------------------------------------------
+
+    printf "\n"
+
+    line
+
+    printf "\n"
+
+    printf "${CYAN}${BOLD}DIAGNOSTIC ENGINE${RESET}\n"
+
+    printf "\n"
+
+    spinner 1 "Starting scan sequence"
+
+    spinner 1 "Analyzing username structure"
+
+    spinner 1 "Checking account status indicators"
+
+    spinner 1 "Analyzing available account information"
+
+    scan
+
+    # -----------------------------------------------------
+    # RESULTS
+    # -----------------------------------------------------
+
+    printf "\n"
+
+    printf "${GREEN}${BOLD}╭──────────────────── SCAN RESULTS ────────────────────────╮${RESET}\n"
+
+    sleep 0.3
+
+    printf "${GREEN}│${RESET} ✔ Username format valid\n"
+
+    sleep 0.3
+
+    printf "${GREEN}│${RESET} ✔ Target accepted\n"
+
+    sleep 0.3
+
+    printf "${GREEN}│${RESET} ✔ Diagnostic scan completed\n"
+
+    sleep 0.3
+
+    printf "${GREEN}│${RESET} ✔ Username found: ${CYAN}@${username}${RESET}\n"
+
+    printf "${GREEN}${BOLD}╰──────────────────────────────────────────────────────────╯${RESET}\n"
+
+    sleep 1
+
+    # -----------------------------------------------------
+    # ACCESS KEY
+    # -----------------------------------------------------
+
+    if ! verify_key; then
+
+        printf "\n"
+
+        error "Access verification failed."
+
+        warning "Operation stopped."
+
+        sleep 2
+
+        return
+
+    fi
+
+    # -----------------------------------------------------
+    # AUTHORIZED WORKFLOW
+    # -----------------------------------------------------
+
+    printf "\n"
+
+    line
+
+    printf "\n"
+
+    printf "${GREEN}${BOLD}AUTHORIZED WORKFLOW${RESET}\n"
+
+    printf "\n"
+
+    spinner 1 "Loading support workflow"
+
+    spinner 1 "Preparing support procedure"
+
+    spinner 1 "Generating diagnostic report"
+
+    printf "\n"
+
+    # -----------------------------------------------------
+    # PROGRESS
+    # -----------------------------------------------------
+
+    progress "Processing ${issue}"
+
+    progress "Preparing support workflow"
+
+    progress "Finalizing diagnostic report"
+
+    # -----------------------------------------------------
+    # FINAL RESULT
+    # -----------------------------------------------------
+
+    printf "\n"
+
+    line
+
+    printf "\n"
+
+    printf "${GREEN}${BOLD}╔══════════════════════════════════════════════════════════╗${RESET}\n"
+
+    printf "${GREEN}${BOLD}║                                                        ║${RESET}\n"
+
+    printf "${GREEN}${BOLD}║              ✔ PROCESS COMPLETED                       ║${RESET}\n"
+
+    printf "${GREEN}${BOLD}║                                                        ║${RESET}\n"
+
+    printf "${GREEN}${BOLD}╚══════════════════════════════════════════════════════════╝${RESET}\n"
+
+    printf "\n"
+
+    printf "${WHITE}Username :${RESET} ${CYAN}@${username}${RESET}\n"
+
+    printf "${WHITE}Issue    :${RESET} ${issue_color}${issue}${RESET}\n"
+
+    printf "${WHITE}Status   :${RESET} ${GREEN}WORKFLOW COMPLETED${RESET}\n"
+
+    printf "\n"
+
+    spinner 1 "Generating final report"
+
+    printf "\n"
+
+    printf "${CYAN}╭──────────────────── FINAL STATUS ────────────────────────╮${RESET}\n"
+
+    printf "${CYAN}│${RESET} ${GREEN}✔ Username verified${RESET}\n"
+
+    printf "${CYAN}│${RESET} ${GREEN}✔ Authorization verified${RESET}\n"
+
+    printf "${CYAN}│${RESET} ${GREEN}✔ Diagnostic completed${RESET}\n"
+
+    printf "${CYAN}│${RESET} ${GREEN}✔ Support workflow completed${RESET}\n"
+
+    printf "${CYAN}╰──────────────────────────────────────────────────────────╯${RESET}\n"
+
+    printf "\n"
+
+    printf "${GRAY}This terminal program simulates a support/recovery workflow;${RESET}\n"
+
+    printf "${GRAY}it does not directly modify Instagram's backend systems.${RESET}\n"
+
+    printf "\n"
+
+    read -r -p "$(printf "${GREEN}Press ENTER to return to menu...${RESET}")"
+
+}
+
+# =========================================================
+# ABOUT
+# =========================================================
+
+about() {
+
+    clear
+
+    header
+
+    printf "\n"
+
+    printf "${PINK}${BOLD}ABOUT INSTAHELP PRO${RESET}\n"
+
+    printf "\n"
+
+    printf "${WHITE}Version :${RESET} 3.0\n"
+
+    printf "${WHITE}Platform:${RESET} Termux\n"
+
+    printf "${WHITE}Engine  :${RESET} Diagnostic UI\n"
+
+    printf "\n"
+
+    printf "${GREEN}FEATURES${RESET}\n"
+
+    printf "\n"
+
+    printf " ${CYAN}•${RESET} RGB Instagram startup logo\n"
+
+    printf " ${CYAN}•${RESET} Account issue selection\n"
+
+    printf " ${CYAN}•${RESET} Username confirmation\n"
+
+    printf " ${CYAN}•${RESET} Animated username scanner\n"
+
+    printf " ${CYAN}•${RESET} Operator authorization\n"
+
+    printf " ${CYAN}•${RESET} Progress indicators\n"
+
+    printf " ${CYAN}•${RESET} Normal Termux scrolling\n"
+
+    printf " ${CYAN}•${RESET} Multi-stage support workflow\n"
+
+    printf "\n"
+
+    printf "${GRAY}This program is a terminal UI/support simulation.${RESET}\n"
+
+    printf "\n"
+
+    read -r -p "$(printf "${GREEN}Press ENTER to return...${RESET}")"
+
+}
+
+# =========================================================
+# STARTUP
+# =========================================================
+
+rgb_logo
+
+clear
+
+header
+
+printf "\n"
+
+printf "${GRAY}System:${RESET} ${GREEN}● ONLINE${RESET}\n"
+
+printf "${GRAY}Engine:${RESET} ${CYAN}DIAGNOSTIC v3.0${RESET}\n"
+
+printf "${GRAY}Mode:${RESET}   ${PURPLE}SUPPORT SIMULATION${RESET}\n"
+
+printf "\n"
+
+line
+
+printf "\n"
+
+# =========================================================
+# MAIN MENU
+# =========================================================
+
+while true; do
+
+    printf "${GREEN}${BOLD}[1]${RESET} ${CYAN}ACCOUNT DISABLED${RESET}\n"
+
+    printf "${GREEN}${BOLD}[2]${RESET} ${PURPLE}ACCOUNT SUSPENDED${RESET}\n"
+
+    printf "${GREEN}${BOLD}[3]${RESET} ${PINK}ACCOUNT BAN${RESET}\n"
+
+    printf "${GREEN}${BOLD}[4]${RESET} ${YELLOW}ABOUT${RESET}\n"
+
+    printf "${GREEN}${BOLD}[0]${RESET} ${RED}EXIT${RESET}\n"
+
+    printf "\n"
+
+    line
+
+    printf "\n"
+
+    read -r -p "$(printf "${GREEN}╰─➤ Select diagnostic type: ${RESET}")" choice
+
+    case "$choice" in
+
+        1)
+
+            diagnose_account "ACCOUNT DISABLED" "$CYAN"
+
+            ;;
+
+        2)
+
+            diagnose_account "ACCOUNT SUSPENDED" "$PURPLE"
+
+            ;;
+
+        3)
+
+            diagnose_account "ACCOUNT BAN" "$PINK"
+
+            ;;
+
+        4)
+
+            about
+
+            clear
+
+            header
+
+            printf "\n"
+
+            printf "${GRAY}System:${RESET} ${GREEN}● ONLINE${RESET}\n"
+
+            printf "${GRAY}Engine:${RESET} ${CYAN}DIAGNOSTIC v3.0${RESET}\n"
+
+            printf "${GRAY}Mode:${RESET}   ${PURPLE}SUPPORT SIMULATION${RESET}\n"
+
+            printf "\n"
+
+            line
+
+            printf "\n"
+
+            ;;
+
+        0)
+
+            clear
+
+            printf "${CYAN}Closing INSTAHELP PRO...${RESET}\n"
+
+            sleep 1
+
+            clear
+
+            exit 0
+
+            ;;
+
+        *)
+
+            printf "\n"
+
+            error "Invalid option."
+
+            sleep 1
+
+            ;;
+
+    esac
+
+doneSHOW_CURSOR="${ESC}[?25h"
 
 trap 'printf "$SHOW_CURSOR"; exit' INT TERM EXIT
 
