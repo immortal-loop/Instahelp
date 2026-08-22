@@ -556,7 +556,7 @@ boot_intro() {
     echo ""
 
     echo -e "             ${PINK}${BOLD}INSTAGRAM${RESET}"
-    echo -e "             ${GRAY}${DIM}ACCOUNT SUPPORT VOXX${RESET}"
+    echo -e "             ${GRAY}${DIM}ACCOUNT SUPPORT ${RESET}"
     echo ""
     draw_instagram_logo
     echo ""
@@ -727,7 +727,7 @@ license_input() {
     echo ""
 
     printf \
-        "  ${PURPLE}${BOLD}› ENTER PASSWORD (acchelp@789):${RESET} "
+        "  ${PURPLE}${BOLD}› LICENSE KEY:${RESET} "
 
     read -r LICENSE_KEY
 
