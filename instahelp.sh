@@ -1,13 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 # =========================================================
-#                 INSTAHELP PRO v3.0
+#                 INSTAHELP PRO v3.1
 #          Instagram Account Support Simulator
 # =========================================================
-
-# This program is a TERMINAL SIMULATION.
-# It does not access, scan, unlock, recover, or modify
-# Instagram accounts or Instagram backend systems.
 
 # =========================================================
 # COLORS
@@ -72,23 +68,6 @@ colors=(
 )
 
 # =========================================================
-# TYPEWRITER
-# =========================================================
-
-typewriter() {
-
-    local text="$1"
-    local delay=0.012
-
-    for ((i=0; i<${#text}; i++)); do
-        printf "%c" "${text:$i:1}"
-        sleep "$delay"
-    done
-
-    echo ""
-}
-
-# =========================================================
 # SPINNER
 # =========================================================
 
@@ -104,7 +83,7 @@ spinner() {
 
     while [ $((SECONDS-start)) -lt "$duration" ]; do
 
-        printf "\r${CYAN}${frames[$i]}${RESET} ${WHITE}%-60s${RESET}" "$message"
+        printf "\r${CYAN}${frames[$i]}${RESET} ${WHITE}%-58s${RESET}" "$message"
 
         i=$(( (i+1) % ${#frames[@]} ))
 
@@ -112,7 +91,7 @@ spinner() {
 
     done
 
-    printf "\r${GREEN}✔${RESET} ${WHITE}%-60s${RESET}\n" "$message"
+    printf "\r${GREEN}✔${RESET} ${WHITE}%-58s${RESET}\n" "$message"
 }
 
 # =========================================================
@@ -188,22 +167,19 @@ terms_and_conditions() {
     clear
 
     echo -e "${YELLOW}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${YELLOW}${BOLD}║             TERMS & CONDITIONS                    ║${RESET}"
+    echo -e "${YELLOW}${BOLD}║              TERMS & CONDITIONS                   ║${RESET}"
     echo -e "${YELLOW}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
 
     echo ""
 
-    echo -e "${WHITE}Please review before continuing:${RESET}"
+    echo -e "${WHITE}Please confirm the following:${RESET}"
     echo ""
 
-    echo -e "${GRAY}  1.${RESET} This utility is a diagnostic/support workflow simulator."
-    echo -e "${GRAY}  2.${RESET} Only use usernames you are authorized to check."
-    echo -e "${GRAY}  3.${RESET} No Instagram backend is accessed or modified."
-    echo -e "${GRAY}  4.${RESET} Scan results shown by this program are simulated."
-    echo -e "${GRAY}  5.${RESET} The private key belongs only to this local script."
-    echo ""
+    echo -e "${CYAN}•${RESET} Use only usernames you are authorized to check."
+    echo -e "${CYAN}•${RESET} This tool provides a simulated diagnostic workflow."
+    echo -e "${CYAN}•${RESET} No account credentials are requested."
+    echo -e "${CYAN}•${RESET} Scan results are simulated."
 
-    echo -e "${CYAN}────────────────────────────────────────────────────────${RESET}"
     echo ""
 
     read -p "$(echo -e "${GREEN}Accept Terms & Conditions? [Y/N]: ${RESET}")" terms
@@ -211,7 +187,6 @@ terms_and_conditions() {
     case "$terms" in
 
         y|Y)
-
             echo ""
             echo -e "${GREEN}✔ Terms accepted.${RESET}"
             sleep 1
@@ -219,10 +194,8 @@ terms_and_conditions() {
             ;;
 
         *)
-
             echo ""
             echo -e "${RED}✖ Terms not accepted.${RESET}"
-            echo -e "${GRAY}Operation cancelled.${RESET}"
             sleep 2
             return 1
             ;;
@@ -242,17 +215,18 @@ confirm_username() {
     clear
 
     echo -e "${YELLOW}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${YELLOW}${BOLD}║             TARGET CONFIRMATION                  ║${RESET}"
+    echo -e "${YELLOW}${BOLD}║              TARGET CONFIRMATION                 ║${RESET}"
     echo -e "${YELLOW}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
 
     echo ""
 
-    echo -e "${WHITE}Target Username:${RESET} ${CYAN}@${username}${RESET}"
-    echo -e "${WHITE}Selected Issue :${RESET} ${YELLOW}${title}${RESET}"
+    echo -e "${WHITE}Username :${RESET} ${CYAN}@${username}${RESET}"
+    echo -e "${WHITE}Issue    :${RESET} ${YELLOW}${title}${RESET}"
 
     echo ""
 
-    echo -e "${GRAY}Please verify that the username above is correct.${RESET}"
+    echo -e "${GRAY}Please verify the username before continuing.${RESET}"
+
     echo ""
 
     read -p "$(echo -e "${GREEN}Confirm target? [Y/N]: ${RESET}")" confirm
@@ -279,7 +253,7 @@ confirm_username() {
 }
 
 # =========================================================
-# PROFESSIONAL USERNAME SCAN
+# PROFESSIONAL SCAN
 # =========================================================
 
 professional_scan() {
@@ -289,39 +263,40 @@ professional_scan() {
     clear
 
     echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${CYAN}${BOLD}║             ADVANCED DIAGNOSTIC SCAN             ║${RESET}"
+    echo -e "${CYAN}${BOLD}║             ADVANCED USERNAME SCAN               ║${RESET}"
     echo -e "${CYAN}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
 
     echo ""
 
     echo -e "${WHITE}Target:${RESET} ${CYAN}@${username}${RESET}"
+
     echo ""
 
     spinner 1 "Initializing diagnostic engine"
-    spinner 1 "Loading username analysis modules"
+    spinner 1 "Loading analysis modules"
     spinner 1 "Validating username structure"
-    spinner 1 "Preparing diagnostic environment"
+    spinner 1 "Preparing scan environment"
 
     echo ""
 
-    echo -e "${PURPLE}${BOLD}Running username analysis...${RESET}"
+    echo -e "${PURPLE}${BOLD}SCAN MODULES${RESET}"
     echo ""
 
     scan_bar "Username signature"
     scan_bar "Username consistency"
-    scan_bar "Public metadata"
-    scan_bar "Account status indicators"
+    scan_bar "Public information"
+    scan_bar "Account status"
     scan_bar "Restriction indicators"
     scan_bar "Support compatibility"
     scan_bar "Diagnostic consistency"
 
     echo ""
 
-    progress_bar "Compiling diagnostic results..."
+    progress_bar "Compiling scan results..."
 
     echo ""
 
-    echo -e "${GREEN}✔ Username diagnostic scan completed.${RESET}"
+    echo -e "${GREEN}${BOLD}✔ USERNAME SCAN COMPLETED${RESET}"
 
     sleep 2
 }
@@ -335,32 +310,28 @@ key_verification() {
     clear
 
     echo -e "${PURPLE}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${PURPLE}${BOLD}║             PRIVATE KEY VERIFICATION              ║${RESET}"
+    echo -e "${PURPLE}${BOLD}║             PRIVATE KEY REQUIRED                  ║${RESET}"
     echo -e "${PURPLE}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
 
     echo ""
 
-    echo -e "${GRAY}A local operator key is required to continue.${RESET}"
-    echo -e "${GRAY}This is NOT an Instagram password.${RESET}"
-    echo -e "${GRAY}It is only used by this terminal simulation.${RESET}"
+    echo -e "${GRAY}Enter the local operator key to continue.${RESET}"
 
     echo ""
 
-    read -s -p "$(echo -e "${YELLOW}Enter private key: ${RESET}")" entered_key
+    read -s -p "$(echo -e "${YELLOW}Private key: ${RESET}")" entered_key
 
     echo ""
 
-    spinner 2 "Checking local authorization signature"
-
-    spinner 1 "Validating key format"
+    spinner 2 "Verifying authorization key"
+    spinner 1 "Checking key signature"
+    spinner 1 "Validating local authorization"
 
     if [ "$entered_key" = "$ACCESS_KEY" ]; then
 
         echo ""
 
         echo -e "${GREEN}${BOLD}✔ PRIVATE KEY VERIFIED${RESET}"
-
-        echo -e "${GRAY}Local authorization successful.${RESET}"
 
         sleep 2
 
@@ -372,8 +343,6 @@ key_verification() {
 
         echo -e "${RED}${BOLD}✖ INVALID PRIVATE KEY${RESET}"
 
-        echo -e "${GRAY}Authorization denied.${RESET}"
-
         sleep 2
 
         return 1
@@ -382,7 +351,7 @@ key_verification() {
 }
 
 # =========================================================
-# POST-KEY SCAN
+# POST KEY SCAN
 # =========================================================
 
 post_key_scan() {
@@ -392,24 +361,25 @@ post_key_scan() {
     clear
 
     echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${GREEN}${BOLD}║          POST-AUTHORIZATION ANALYSIS             ║${RESET}"
+    echo -e "${GREEN}${BOLD}║            FINAL DIAGNOSTIC SCAN                 ║${RESET}"
     echo -e "${GREEN}${BOLD}╚════════════════════════════════════════════════════╝${RESET}"
 
     echo ""
 
     echo -e "${WHITE}Target:${RESET} ${CYAN}@${username}${RESET}"
+
     echo ""
 
     spinner 1 "Loading authorized diagnostic session"
     spinner 1 "Synchronizing analysis modules"
-    spinner 1 "Validating local authorization"
+    spinner 1 "Validating authorization"
     spinner 1 "Running final consistency check"
-    spinner 1 "Preparing simulated support response"
-    spinner 1 "Generating final diagnostic report"
+    spinner 1 "Preparing support workflow"
+    spinner 1 "Generating diagnostic report"
 
     echo ""
 
-    echo -e "${CYAN}${BOLD}Running final verification sweep...${RESET}"
+    echo -e "${CYAN}${BOLD}FINAL VERIFICATION${RESET}"
     echo ""
 
     scan_bar "Authorization state"
@@ -424,13 +394,13 @@ post_key_scan() {
 
     echo ""
 
-    echo -e "${GREEN}✔ Post-authorization scan completed.${RESET}"
+    echo -e "${GREEN}${BOLD}✔ FINAL SCAN COMPLETED${RESET}"
 
     sleep 2
 }
 
 # =========================================================
-# FINAL SUCCESS SCREEN
+# SUCCESS SCREEN
 # =========================================================
 
 success_screen() {
@@ -452,39 +422,34 @@ success_screen() {
 
     echo ""
 
-    echo -e "${WHITE}Target Account:${RESET} ${CYAN}@${username}${RESET}"
-    echo -e "${WHITE}Issue:${RESET}         ${YELLOW}${title}${RESET}"
-    echo -e "${WHITE}Authorization:${RESET} ${GREEN}VERIFIED${RESET}"
-    echo -e "${WHITE}Username Scan:${RESET} ${GREEN}COMPLETED${RESET}"
-    echo -e "${WHITE}Final Scan:${RESET}    ${GREEN}COMPLETED${RESET}"
-    echo -e "${WHITE}Workflow:${RESET}      ${GREEN}SUCCESSFUL${RESET}"
+    echo -e "${WHITE}Username      :${RESET} ${CYAN}@${username}${RESET}"
+    echo -e "${WHITE}Issue         :${RESET} ${YELLOW}${title}${RESET}"
+    echo -e "${WHITE}Authorization :${RESET} ${GREEN}VERIFIED${RESET}"
+    echo -e "${WHITE}Username Scan :${RESET} ${GREEN}COMPLETED${RESET}"
+    echo -e "${WHITE}Final Scan    :${RESET} ${GREEN}COMPLETED${RESET}"
+    echo -e "${WHITE}Workflow      :${RESET} ${GREEN}SUCCESSFUL${RESET}"
 
     echo ""
 
     echo -e "${CYAN}════════════════════════════════════════════════════${RESET}"
 
-    echo -e "${GREEN}✔ Username confirmed${RESET}"
+    echo -e "${GREEN}✔ Target confirmed${RESET}"
     echo -e "${GREEN}✔ Terms accepted${RESET}"
-    echo -e "${GREEN}✔ Diagnostic scan completed${RESET}"
+    echo -e "${GREEN}✔ Username scan completed${RESET}"
     echo -e "${GREEN}✔ Private key verified${RESET}"
-    echo -e "${GREEN}✔ Post-authorization scan completed${RESET}"
-    echo -e "${GREEN}✔ Support workflow generated${RESET}"
+    echo -e "${GREEN}✔ Final scan completed${RESET}"
+    echo -e "${GREEN}✔ Confirmation successful${RESET}"
 
     echo -e "${CYAN}════════════════════════════════════════════════════${RESET}"
 
     echo ""
 
-    typewriter "${GRAY}NOTE: This is a terminal simulation.${RESET}"
-    typewriter "${GRAY}It does not access, unlock, recover, or modify${RESET}"
-    typewriter "${GRAY}Instagram accounts or Instagram backend systems.${RESET}"
+    read -p "$(echo -e "${GREEN}Press ENTER to return to menu...${RESET}")"
 
-    echo ""
-
-    read -p "$(echo -e "${GREEN}Press ENTER to return to main menu...${RESET}")"
 }
 
 # =========================================================
-# RECOVERY / DIAGNOSTIC FLOW
+# RECOVERY FLOW
 # =========================================================
 
 handle_recovery() {
@@ -511,10 +476,8 @@ handle_recovery() {
         sleep 2
 
         return
-
     fi
 
-    # Remove @ if entered
     username="${username#@}"
 
     # =====================================================
@@ -530,14 +493,13 @@ handle_recovery() {
     echo ""
 
     spinner 1 "Initializing diagnostic engine"
-    spinner 1 "Loading account analysis modules"
+    spinner 1 "Loading analysis modules"
     spinner 1 "Preparing username scanner"
-    spinner 1 "Establishing diagnostic session"
-    spinner 1 "Loading support workflow"
+    spinner 1 "Preparing diagnostic session"
 
     echo ""
 
-    echo -e "${WHITE}Target Username:${RESET} ${CYAN}@${username}${RESET}"
+    echo -e "${WHITE}Target:${RESET} ${CYAN}@${username}${RESET}"
 
     sleep 1
 
@@ -550,7 +512,7 @@ handle_recovery() {
     fi
 
     # =====================================================
-    # TARGET CONFIRMATION
+    # CONFIRM USERNAME
     # =====================================================
 
     if ! confirm_username "$username" "$title"; then
@@ -571,7 +533,7 @@ handle_recovery() {
 
         echo ""
 
-        echo -e "${RED}Returning to main menu...${RESET}"
+        echo -e "${RED}Authorization failed.${RESET}"
 
         sleep 2
 
@@ -579,20 +541,20 @@ handle_recovery() {
     fi
 
     # =====================================================
-    # POST KEY SCAN
+    # FINAL SCAN
     # =====================================================
 
     post_key_scan "$username"
 
     # =====================================================
-    # FINAL RESULT
+    # SUCCESS
     # =====================================================
 
     success_screen "$username" "$title"
 }
 
 # =========================================================
-# ABOUT SCREEN
+# ABOUT
 # =========================================================
 
 about_screen() {
@@ -605,26 +567,19 @@ about_screen() {
 
     echo ""
 
-    echo -e "${GREEN}${BOLD}INSTAHELP PRO v3.0${RESET}"
+    echo -e "${GREEN}${BOLD}INSTAHELP PRO v3.1${RESET}"
 
     echo ""
 
-    echo -e "${CYAN}Features:${RESET}"
-
-    echo -e "  ${GREEN}•${RESET} RGB animated terminal interface"
+    echo -e "${CYAN}Features${RESET}"
+    echo ""
+    echo -e "  ${GREEN}•${RESET} RGB terminal interface"
     echo -e "  ${GREEN}•${RESET} Username confirmation"
-    echo -e "  ${GREEN}•${RESET} Terms & Conditions gate"
-    echo -e "  ${GREEN}•${RESET} Multi-stage diagnostic simulation"
-    echo -e "  ${GREEN}•${RESET} Professional scanning animations"
+    echo -e "  ${GREEN}•${RESET} Terms & Conditions"
+    echo -e "  ${GREEN}•${RESET} Multi-stage scanning"
     echo -e "  ${GREEN}•${RESET} Private-key verification"
-    echo -e "  ${GREEN}•${RESET} Post-authorization scan"
+    echo -e "  ${GREEN}•${RESET} Final verification"
     echo -e "  ${GREEN}•${RESET} Animated progress bars"
-    echo -e "  ${GREEN}•${RESET} Final confirmation screen"
-
-    echo ""
-
-    echo -e "${YELLOW}Simulation only:${RESET}"
-    echo -e "${GRAY}No Instagram backend or account is accessed.${RESET}"
 
     echo ""
 
@@ -633,18 +588,20 @@ about_screen() {
 }
 
 # =========================================================
-# STARTUP RGB ANIMATION
+# STARTUP LOGO
 # =========================================================
+
+clear
 
 for frame in {0..3}; do
 
     clear
 
-    local_offset=$((frame * 2))
+    offset=$((frame * 2))
 
     for i in "${!logo[@]}"; do
 
-        color_idx=$(( (i + local_offset) % ${#colors[@]} ))
+        color_idx=$(( (i + offset) % ${#colors[@]} ))
 
         echo -e "${colors[$color_idx]}${logo[$i]}${RESET}"
 
@@ -653,6 +610,17 @@ for frame in {0..3}; do
     sleep 0.12
 
 done
+
+# =========================================================
+# KEEP LOGO ON SCREEN
+# =========================================================
+
+echo ""
+echo -e "${GRAY}INSTAHELP PRO${RESET}"
+echo ""
+echo -e "${GREEN}Press ENTER to continue...${RESET}"
+
+read -r
 
 # =========================================================
 # MAIN MENU
@@ -665,14 +633,14 @@ while true; do
     echo ""
 
     echo -e "${CYAN}${BOLD}╔══════════════════════════════════════════════════════╗${RESET}"
-    echo -e "${CYAN}${BOLD}║${RESET}             ${YELLOW}I${ORANGE}N${GREEN}S${CYAN}T${BLUE}A${PURPLE}H${PINK}E${RED}L${YELLOW}P${RESET} ${GRAY}PRO v3.0${RESET}             ${CYAN}${BOLD}║${RESET}"
+    echo -e "${CYAN}${BOLD}║${RESET}             ${YELLOW}I${ORANGE}N${GREEN}S${CYAN}T${BLUE}A${PURPLE}H${PINK}E${RED}L${YELLOW}P${RESET} ${GRAY}PRO v3.1${RESET}             ${CYAN}${BOLD}║${RESET}"
     echo -e "${CYAN}${BOLD}║${RESET}          ${GREEN}ACCOUNT SUPPORT TERMINAL${RESET}              ${CYAN}${BOLD}║${RESET}"
     echo -e "${CYAN}${BOLD}╚══════════════════════════════════════════════════════╝${RESET}"
 
     echo ""
 
     echo -e "${GRAY}System:${RESET} ${GREEN}● ONLINE${RESET}"
-    echo -e "${GRAY}Mode:${RESET}   ${PURPLE}PROFESSIONAL DIAGNOSTIC SIMULATION${RESET}"
+    echo -e "${GRAY}Mode:${RESET}   ${PURPLE}DIAGNOSTIC${RESET}"
 
     echo ""
 
@@ -716,7 +684,7 @@ while true; do
 
             clear
 
-            typewriter "${CYAN}Closing INSTAHELP PRO...${RESET}"
+            echo -e "${CYAN}Closing INSTAHELP PRO...${RESET}"
 
             sleep 1
 
